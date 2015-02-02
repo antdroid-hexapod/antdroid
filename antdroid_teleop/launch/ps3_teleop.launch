@@ -1,0 +1,9 @@
+<launch>
+  <node pkg="antdroid_teleop" type="antdroid_teleop_joy" name="antdroid_teleop_joystick">
+    <remap from="antdroid_teleop_joystick/cmd_vel" to="control_interpreter/cmd_vel"/>
+    <remap from="antdroid_teleop_joystick/speed" to="control_interpreter/speed"/>
+  </node>
+
+  <node pkg="joy" type="joy_node" name="joystick"/>
+
+</launch>

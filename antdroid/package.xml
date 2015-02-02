@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package>
+  <name>antdroid</name>
+  <version>0.1.0</version>
+  <description>
+      Antdroid robot metapackage.
+  </description>
+
+  <maintainer email="pando855@gmail.com">Alexander Gil</maintainer>
+  <maintainer email="javieroman91@gmail.com">Javier Roman</maintainer>
+  <license>GPLv3</license>
+  <author email="pando855@gmail.com">Alexander Gil</author>
+  <author email="javieroman91@gmail.com">Javier Roman</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <export><metapackage/></export>
+</package>

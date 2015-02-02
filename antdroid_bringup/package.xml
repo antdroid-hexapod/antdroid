@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package>
+  <name>antdroid_bringup</name>
+  <version>0.0.0</version>
+  <description>Contains all launch files</description>
+
+  <maintainer email="pando855@gmail.com">Alexander Gil</maintainer>
+  <maintainer email="javieroman91@gmail.com">Javier Roman</maintainer>
+  
+ <license>GPLv3</license>
+  <author email="pando855@gmail.com">Alexander Gil</author>
+  <author email="javieroman91@gmail.com">Javier Roman</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roslaunch</build_depend>
+
+  <run_depend>roslaunch</run_depend>
+  <run_depend>antdroid_antfirm</run_depend>
+  <run_depend>antdroid_control_interpreter</run_depend>
+  <run_depend>antdroid_cam_control</run_depend>
+  <run_depend>raspicam</run_depend>
+ <!-- <run_depend>antdroid_teleop</run_depend>-->
+
+
+
+  <export>
+
+
+  </export>
+</package>

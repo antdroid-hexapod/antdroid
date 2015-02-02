@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<package>
+  <name>antdroid_control_interpreter</name>
+  <version>0.1.0</version>
+  <description>
+    antdroid_control_interpreter is the package who bridge basic controls to firmware.
+  </description>
+
+  <maintainer email="pando855@gmail.com">Alexander Gil</maintainer>
+  <maintainer email="javieroman91@gmail.com">Javier Roman</maintainer>
+  
+ <license>GPLv3</license>
+  <author email="pando855@gmail.com">Alexander Gil</author>
+  <author email="javieroman91@gmail.com">Javier Roman</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+    <!-- Ros -->
+  <build_depend>roscpp</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>std_msgs</build_depend>
+
+
+    <!-- Antdroid -->
+  <build_depend>antdroid_msgs</build_depend>
+
+
+    <!-- Ros -->
+  <run_depend>roscpp</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>std_msgs</run_depend>
+
+
+    <!-- Antdroid -->
+  <run_depend>antdroid_msgs</run_depend>
+
+
+  
+  <export>
+    <!-- You can specify that this package is a metapackage here: -->
+    <!-- <metapackage/> -->
+
+    <!-- Other tools can request additional information be placed here -->
+
+  </export>
+</package>

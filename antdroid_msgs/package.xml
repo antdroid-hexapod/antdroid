@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package>
+  <name>antdroid_msgs</name>
+  <version>0.1.0</version>
+  <description>
+      All mensagges to create antdroid topics.
+  </description>
+
+  <maintainer email="pando855@gmail.com">Alexander Gil</maintainer>
+  <maintainer email="javieroman91@gmail.com">Javier Roman</maintainer>
+  <license>GPLv3</license>
+  <author email="pando855@gmail.com">Alexander Gil</author>
+  <author email="javieroman91@gmail.com">Javier Roman</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>message_generation</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <run_depend>message_runtime</run_depend>
+  <run_depend>std_msgs</run_depend>
+
+
+  <export></export>
+</package>

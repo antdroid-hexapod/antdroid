@@ -1,0 +1,15 @@
+<launch>
+    <node pkg="antdroid_cam_control" type="cam_control" name="cam_control" >
+        <param name="test" value="true"/>
+    </node>
+  
+    <node pkg="image_transport" type="republish" name="republisher" args="compressed in:=camera/image raw out:=/camera/image">
+    </node>
+    
+    <node pkg="image_view" type="image_view" name="image_view" args="image:=/camera/image ">
+    </node>
+
+    <node pkg="rosservice" type="rosservice" name="camera_start" args="call /camera/start_capture"/>
+
+</launch>
+
