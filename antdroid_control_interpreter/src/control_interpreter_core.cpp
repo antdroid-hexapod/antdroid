@@ -196,11 +196,13 @@ void ControlInterpreterCore::CheckNewMessageCounter()
     else
         _checker_count = 0;
 
-    if(_checker_count > SPIN_FRECUENCY * SECONDS_UNTIL_RESTART)
+    if(_checker_count > SPIN_FRECUENCY * SECONDS_UNTIL_RESTART ||
+        _new_message_count > INIT_NEW_MESSAGE_COUNTER)
     {
         _checker_count = 0;
         _new_message_count = INIT_NEW_MESSAGE_COUNTER;
     }
+
 }
 
 }
