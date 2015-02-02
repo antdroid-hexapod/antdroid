@@ -71,9 +71,12 @@ ros::Subscriber<antdroid_msgs::Calibrate> calibration("Calibrate", &ControlChang
 ros::Subscriber<antdroid_msgs::Gait> gait("Gait", &ControlChangeGait);
 ros::Subscriber<antdroid_msgs::MoveLeg> moveLeg("MoveLeg", &ControlMoveLeg);
 
-Control::Control(Hexapod* Antdroid)
-{
+std_msgs::Bool is_new_message;
+ros::Publisher pub_is_new_message("NewMessage", &is_new_message);
 
+Control::Control(Hexapod* Antdroid)                                   
+{
+    is_new_message.data = true;
 }
 
 void Control::Start(void)
@@ -91,6 +94,8 @@ void Control::Start(void)
     arduino.subscribe(gait);
     arduino.subscribe(moveLeg);
 
+    arduino.advertise(pub_is_new_message);
+
     level_log = 3;
 
 }
@@ -103,6 +108,9 @@ void Control::ReadInput(void)
 void ControlWalk(const antdroid_msgs::Walk& msg)
 {
     Antdroid.Walk(msg.x, msg.y);
+
+    is_new_message.data = true;
+    pub_is_new_message.publish(&is_new_message);
 }
 
 
@@ -114,6 +122,9 @@ void ControlBalance(const antdroid_msgs::Balance& msg)
 void ControlRotate(const antdroid_msgs::Rotate& msg)
 {
     Antdroid.Rotate(msg.yaw);
+
+    is_new_message.data = true;
+    pub_is_new_message.publish(&is_new_message);
 }
 
 void ControlChangeSpeed(const antdroid_msgs::Speed& msg)
@@ -147,6 +158,9 @@ void ControlChangeGait(const antdroid_msgs::Gait& msg)
         msg.leg5};
 
     Antdroid.ChangeGait(msg.type, sequence);
+
+    is_new_message.data = false;
+    pub_is_new_message.publish(&is_new_message);
 }
 
 

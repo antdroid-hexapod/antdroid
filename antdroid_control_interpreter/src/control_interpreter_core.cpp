@@ -27,7 +27,9 @@ namespace control_interpreter_core
 ControlInterpreterCore::ControlInterpreterCore() : 
     _walk(new antdroid_msgs::Walk()),
     _rotate(new antdroid_msgs::Rotate()),
-    _step(20)
+    _step(20),
+    _new_message_count(INIT_NEW_MESSAGE_COUNTER),
+    _checker_count(0)
 {
 
 }
@@ -58,6 +60,9 @@ bool ControlInterpreterCore::init()
     _input_balance_sub = nh.subscribe("balance", 1, 
         &ControlInterpreterCore::InputBalanceReceived, this);
 
+    _is_new_message_sub = nh.subscribe("/NewMessage", 1, 
+        &ControlInterpreterCore::SendNewMessage, this);
+
     _walk_pub = nh.advertise<antdroid_msgs::Walk>("/Walk", 1);
     _rotate_pub = nh.advertise<antdroid_msgs::Rotate>("/Rotate", 1);
     _speed_pub = nh.advertise<antdroid_msgs::Speed>("/Speed", 1);
@@ -72,7 +77,7 @@ bool ControlInterpreterCore::init()
 
 void ControlInterpreterCore::spin()
 {
-    ros::Rate loop_rate(2);
+    ros::Rate loop_rate(SPIN_FRECUENCY);
 
 
     while(ros::ok())
@@ -80,6 +85,8 @@ void ControlInterpreterCore::spin()
         ros::spinOnce();
 
         loop_rate.sleep();
+
+        CheckNewMessageCounter();
     }
 
 }
@@ -87,6 +94,10 @@ void ControlInterpreterCore::spin()
 void ControlInterpreterCore::InputVelocityReceived(
     const geometry_msgs::TwistPtr& input_velocity)
 {
+    if(_new_message_count == 0)
+        return;
+
+    _new_message_count -= 1;
 
     _walk->x = 0;
     _walk->y = 0;
@@ -168,6 +179,28 @@ void ControlInterpreterCore::InputBalanceReceived(
 {
     _balance_pub.publish(input);
 
+}
+
+void ControlInterpreterCore::SendNewMessage(const std_msgs::Bool& msg)
+{
+    if(msg.data)
+        _new_message_count += 1;
+    else
+        _new_message_count = INIT_NEW_MESSAGE_COUNTER;
+}
+
+void ControlInterpreterCore::CheckNewMessageCounter()
+{
+    if(_new_message_count == 0)
+        _checker_count += 1;
+    else
+        _checker_count = 0;
+
+    if(_checker_count > SPIN_FRECUENCY * SECONDS_UNTIL_RESTART)
+    {
+        _checker_count = 0;
+        _new_message_count = INIT_NEW_MESSAGE_COUNTER;
+    }
 }
 
 }
