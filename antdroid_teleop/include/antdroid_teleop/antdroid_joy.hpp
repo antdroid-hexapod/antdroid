@@ -23,7 +23,14 @@
 #include "boost/thread/thread.hpp"
 #include "ros/console.h"
 #include <geometry_msgs/Twist.h>
+#include <std_msgs/Bool.h>
+#include <antdroid_msgs/Walk.h>
+#include <antdroid_msgs/Rotate.h>
 #include <antdroid_msgs/Speed.h>
+#include <antdroid_msgs/Foot.h>
+#include <antdroid_msgs/Height.h>
+#include <antdroid_msgs/Gait.h>
+#include <antdroid_msgs/Balance.h>
 
 
 
@@ -67,9 +74,52 @@
 #define PS3_AXIS_ACCELEROMETER_UP        18
 #define PS3_AXIS_GYRO_YAW                19
 
-#define RISE_SPEED 1
-#define DECREASE_SPEED 0
-#define CONST_SPEED 2
+#define DECREASE_SPEED      0
+#define RISE_SPEED          1
+
+#define DECREASE_FOOT       0
+#define RISE_FOOT           1
+
+#define DECREASE_HEIGHT     0
+#define RISE_HEIGHT         1
+
+#define DECREASE_STEP       0
+#define RISE_STEP           1
+
+#define ROTATE_LEFT         1
+#define ROTATE_RIGHT        -1
+
+#define ANGLE_STEP  20
+#define DEAD_ZONE   0.5
+
+#define TRIPOD_MODE 1
+#define RIPPLE_MODE 2
+
+//Mi configuracion
+ // Ver http://wiki.ros.org/joystick_remapper para remapear usando el xml
+
+#define MI_BOTON_CUADRADO       0
+#define MI_BOTON_EQUIS          1
+#define MI_BOTON_CIRCULO        2
+#define MI_BOTON_TRIANGULO      3
+#define MI_BOTON_L1             4
+#define MI_BOTON_R1             5 
+#define MI_BOTON_L2             6
+#define MI_BOTON_R2             7
+#define MI_BOTON_SELECT         8
+#define MI_BOTON_START          9
+#define MI_BOTON_L3             10
+#define MI_BOTON_R3             11
+#define MI_BOTON_PS             12
+
+#define MI_STICK_IZQUIERDO_IZ_DER   0
+#define MI_STICK_IZQUIERDO_ARR_ABA  1
+#define MI_STICK_DERECHO_IZ_DER     2
+#define MI_STICK_DERECHO_ARR_ABA    3
+#define MI_CRUCETA_IZ_DER           4
+#define MI_CRUCETA_ARR_ABA          5
+
+
 
 class AntdroidTeleop
 {
@@ -80,29 +130,81 @@ private:
     void joyCallback(const sensor_msgs::Joy::ConstPtr& joy);
     void publish();
 
+    void manageBalance(void);
+    int  updateAngle(int axis, int last_angle);
+
     ros::NodeHandle _ph, _nh;
 
-    int _linear;
-    int _angular;
+    int _rotate_right;
+    int _rotate_left;
 
-    int _walk_button;
-    int _rotate_left_button;
-    int _rotate_right_button;
-    int _rise_speed_button;
-    int _decrease_speed_button;
+    int _change_speed;
+    int _change_height;
+    int _change_foot;
+    int _change_step;
 
-    double _l_scale, _a_scale;
+    int _change_gait;
+    
+    int _walk_x;
+    int _walk_y;
 
-    ros::Publisher _vel_pub;
-    ros::Publisher _speed_pub;
+    int _balance_x;
+    int _balance_y;
+    int _balance_z;
+    int _balance_default;
 
-    ros::Subscriber _joy_sub;
+    int _action_button;
 
-    antdroid_msgs::Speed _change_speed;
-    geometry_msgs::Twist _last_published;
+    int _attack;
+    int _engage;
+    int _disengage;
+
+
+    bool _new_balance_msg;
+    bool _new_balance_z_msg;
+    bool _new_gait_msg;
+    bool _new_height_msg;
+    bool _new_foot_msg;
+    bool _new_rotate_msg;
+    bool _new_speed_msg;
+    bool _new_vel_msg;
+    bool _new_step_msg;
+    bool _new_balance_default_msg;
+    bool _new_attack_msg;
+    bool _new_engage_msg;
+    bool _new_disengage_msg;
+
+    int _last_pitch;
+    int _pitch;
+    int _last_roll;
+    int _roll;
+    int _last_yaw;
+    int _yaw;
+
+    int _gait_type;
+
+    int _max_angle_step;
+
+
+    ros::Subscriber sub_joy;
+
+    ros::Publisher  _pub_balance;
+    ros::Publisher  _pub_gait;
+    ros::Publisher  _pub_height;
+    ros::Publisher  _pub_foot;
+    ros::Publisher  _pub_speed;
+    ros::Publisher  _pub_step;
+    ros::Publisher  _pub_vel;
+
+    antdroid_msgs::Balance      _msg_balance;
+    antdroid_msgs::Gait         _msg_gait;
+    antdroid_msgs::Height       _msg_height;
+    antdroid_msgs::Foot         _msg_foot;
+    antdroid_msgs::Speed        _msg_changeSpeed;
+    geometry_msgs::Twist        _msg_vel;
+    std_msgs::Bool              _msg_step;
+
     
     boost::mutex _publish_mutex;
-    bool _walk_mode;
     ros::Timer _timer;
-
 };

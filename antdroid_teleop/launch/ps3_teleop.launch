@@ -1,7 +1,12 @@
 <launch>
-  <node pkg="antdroid_teleop" type="antdroid_teleop_joy" name="antdroid_teleop_joystick">
+  <node pkg="antdroid_teleop" type="antdroid_teleop_joy" name="antdroid_teleop_joystick" output="screen">
     <remap from="antdroid_teleop_joystick/cmd_vel" to="control_interpreter/cmd_vel"/>
     <remap from="antdroid_teleop_joystick/speed" to="control_interpreter/speed"/>
+    <remap from="antdroid_teleop_joystick/foot" to="control_interpreter/foot"/>
+    <remap from="antdroid_teleop_joystick/height" to="control_interpreter/height"/>
+    <remap from="antdroid_teleop_joystick/gait" to="control_interpreter/gait"/>
+    <remap from="antdroid_teleop_joystick/step" to="control_interpreter/step"/>
+    <remap from="antdroid_teleop_joystick/balance" to="control_interpreter/balance"/>
   </node>
 
   <node pkg="joy" type="joy_node" name="joystick"/>
