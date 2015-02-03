@@ -37,6 +37,7 @@
 #include <antdroid_msgs/Calibrate.h>
 #include <antdroid_msgs/Gait.h>
 #include <antdroid_msgs/MoveLeg.h>
+#include <std_msgs/Bool.h>
 
 
 extern ros::NodeHandle arduino;

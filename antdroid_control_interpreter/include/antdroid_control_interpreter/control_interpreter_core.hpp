@@ -31,6 +31,10 @@
 #include <antdroid_msgs/Gait.h>
 #include <antdroid_msgs/Balance.h>
 
+static const int SPIN_FRECUENCY = 8;
+static const int INIT_NEW_MESSAGE_COUNTER = 2;
+static const int SECONDS_UNTIL_RESTART = 6;
+
 namespace control_interpreter_core
 {
     class ControlInterpreterCore
@@ -53,6 +57,8 @@ namespace control_interpreter_core
 
 
         int _step;
+        int _new_message_count;
+        int _checker_count;
 
         antdroid_msgs::WalkPtr _walk;
         antdroid_msgs::RotatePtr _rotate;
@@ -65,21 +71,20 @@ namespace control_interpreter_core
         ros::Subscriber _input_step_sub;
         ros::Subscriber _input_balance_sub;
 
+        ros::Subscriber _is_new_message_sub;
+
 
         void InputVelocityReceived(
             const geometry_msgs::TwistPtr& input_velocity);
-        void InputSpeedReceived(
-            const antdroid_msgs::Speed& input);
-        void InputFootReceived(
-            const antdroid_msgs::Foot& input);
-        void InputHeightReceived(
-            const antdroid_msgs::Height& input);
-        void InputGaitReceived(
-            const antdroid_msgs::Gait& input);
-        void InputStepReceived(
-            const std_msgs::Bool& input);
-        void InputBalanceReceived(
-            const antdroid_msgs::Balance& input);
+        void InputSpeedReceived(const antdroid_msgs::Speed& input);
+        void InputFootReceived(const antdroid_msgs::Foot& input);
+        void InputHeightReceived(const antdroid_msgs::Height& input);
+        void InputGaitReceived(const antdroid_msgs::Gait& input);
+        void InputStepReceived(const std_msgs::Bool& input);
+        void InputBalanceReceived(const antdroid_msgs::Balance& input);
+        
+        void CheckNewMessageCounter();
+        void SendNewMessage(const std_msgs::Bool& msg);
 
     };
 }

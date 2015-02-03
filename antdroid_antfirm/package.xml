@@ -16,9 +16,12 @@
   <build_depend>rosserial_arduino</build_depend>
   <build_depend>rosserial_client</build_depend>
   <build_depend>antdroid_msgs</build_depend>
+  <build_depend>std_msgs</build_depend>
+
   <run_depend>rosserial_arduino</run_depend>
   <run_depend>rosserial_msgs</run_depend>
   <run_depend>antdroid_msgs</run_depend>
+  <run_depend>std_msgs</run_depend>
 
   <export></export>
 </package>
