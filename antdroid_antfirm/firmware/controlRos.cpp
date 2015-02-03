@@ -75,7 +75,6 @@ std_msgs::Bool is_new_message;
 ros::Publisher pub_is_new_message("NewMessage", &is_new_message);
 
 Control::Control(Hexapod* Antdroid)                                   
-:   _antiblock_counter(0)
 {
     is_new_message.data = true;
 }
@@ -104,23 +103,6 @@ void Control::Start(void)
 void Control::ReadInput(void)
 {
     arduino.spinOnce();
-
-    AntiblockCheck();
-}
-
-void Control::AntiblockCheck(void)
-{
-    if(_antiblock_counter >= MAX_CYCLES_BLOCKED )
-    {
-        _antiblock_counter = 0;
-
-        is_new_message.data = false;
-        pub_is_new_message.publish(&is_new_message);
-    }
-    else
-    {
-        _antiblock_counter += 1;
-    }
 }
 
 void ControlWalk(const antdroid_msgs::Walk& msg)

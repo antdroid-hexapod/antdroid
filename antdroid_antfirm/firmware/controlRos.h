@@ -43,8 +43,6 @@
 extern ros::NodeHandle arduino;
 extern Hexapod Antdroid;
 
-static const int MAX_CYCLES_BLOCKED = 40;
-
 void ControlWalk(const antdroid_msgs::Walk& msg);
 void ControlBalance(const antdroid_msgs::Balance& msg);
 void ControlRotate(const antdroid_msgs::Rotate& msg);
@@ -65,10 +63,6 @@ class Control
 
     void ReadInput(void);
 
-    private:
-    int _antiblock_counter;
-
-    void AntiblockCheck(void);
 };
 
 #endif
