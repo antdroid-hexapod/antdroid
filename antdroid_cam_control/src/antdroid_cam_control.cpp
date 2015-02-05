@@ -75,7 +75,7 @@ void ImageConverter::imageCb(const sensor_msgs::ImageConstPtr& msg)
     if(!_block_green)
         greenFilter(cv_ptr->image);
 
-    waitKey(250);
+    waitKey(200);
 }
 
    
