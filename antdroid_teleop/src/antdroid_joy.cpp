@@ -27,8 +27,8 @@
 AntdroidTeleop::AntdroidTeleop():
     _ph("~"),
 
-    _rotate_right           (MI_BOTON_R1),
-    _rotate_left            (MI_BOTON_L1),
+    _rotate_right           (PS3_BUTTON_REAR_RIGHT_1),
+    _rotate_left            (PS3_BUTTON_REAR_LEFT_1),
 
     _change_speed           (MI_CRUCETA_ARR_ABA),
     _change_height          (MI_CRUCETA_IZ_DER),
@@ -37,18 +37,18 @@ AntdroidTeleop::AntdroidTeleop():
 
     _walk_y                 (MI_STICK_IZQUIERDO_IZ_DER),
     _walk_x                 (MI_STICK_IZQUIERDO_ARR_ABA),
-    _change_gait            (MI_BOTON_L3),
+    _change_gait            (PS3_BUTTON_STICK_LEFT),
 
     _balance_x              (MI_STICK_DERECHO_ARR_ABA),
     _balance_y              (MI_STICK_DERECHO_IZ_DER),
     _balance_z              (MI_STICK_DERECHO_IZ_DER),
-    _balance_default        (MI_BOTON_R3),
+    _balance_default        (PS3_BUTTON_STICK_RIGHT),
 
-    _attack                 (MI_BOTON_TRIANGULO),
-    _engage                 (MI_BOTON_START),
-    _disengage              (MI_BOTON_SELECT),
+    _attack                 (PS3_BUTTON_ACTION_TRIANGLE),
+    _engage                 (PS3_BUTTON_START),
+    _disengage              (PS3_BUTTON_SELECT),
 
-    _action_button          (MI_BOTON_R2),
+    _action_button          (PS3_BUTTON_REAR_RIGHT_2),
 
     _last_pitch             (0),
     _last_roll              (0),
