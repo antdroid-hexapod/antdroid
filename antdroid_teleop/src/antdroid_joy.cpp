@@ -110,9 +110,9 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
       (joy->buttons[_rise_height] || joy->buttons[_decrease_height]))
     {
         if(joy->buttons[_rise_height])
-            _msg_height.height = DECREASE_HEIGHT;
-        if(joy->buttons[_decrease_height])
             _msg_height.height = RISE_HEIGHT;
+        if(joy->buttons[_decrease_height])
+            _msg_height.height = DECREASE_HEIGHT;
         
         _new_height_msg = true;
     }
@@ -134,9 +134,9 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
       (joy->buttons[_rise_step] || joy->buttons[_decrease_step]))
     {
         if(joy->buttons[_rise_step])
-            _msg_step.data = false;
-        if(joy->buttons[_decrease_step])
             _msg_step.data = true;
+        if(joy->buttons[_decrease_step])
+            _msg_step.data = false;
 
         _new_step_msg = true;
     }
