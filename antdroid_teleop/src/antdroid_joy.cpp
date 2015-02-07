@@ -30,10 +30,17 @@ AntdroidTeleop::AntdroidTeleop():
     _rotate_right           (PS3_BUTTON_REAR_RIGHT_1),
     _rotate_left            (PS3_BUTTON_REAR_LEFT_1),
 
-    _change_speed           (MI_CRUCETA_ARR_ABA),
-    _change_height          (MI_CRUCETA_IZ_DER),
-    _change_foot            (MI_CRUCETA_ARR_ABA),
-    _change_step            (MI_CRUCETA_IZ_DER),
+    _rise_speed             (PS3_BUTTON_CROSS_UP),
+    _decrease_speed         (PS3_BUTTON_CROSS_DOWN),
+
+    _rise_height            (PS3_BUTTON_CROSS_RIGHT),
+    _decrease_height        (PS3_BUTTON_CROSS_LEFT),
+
+    _rise_foot              (PS3_BUTTON_CROSS_UP),
+    _decrease_foot          (PS3_BUTTON_CROSS_DOWN),
+
+    _rise_step              (PS3_BUTTON_CROSS_RIGHT),
+    _decrease_step          (PS3_BUTTON_CROSS_LEFT),
 
     _walk_y                 (MI_STICK_IZQUIERDO_IZ_DER),
     _walk_x                 (MI_STICK_IZQUIERDO_ARR_ABA),
@@ -88,11 +95,11 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 { 
     /*****************  SPEED ********* CROSS PAD *****************************/    
     if(!joy->buttons[_action_button] &&
-      (joy->axes[_change_speed] > DEAD_ZONE || joy->axes[_change_speed] < - DEAD_ZONE))
+      (joy->buttons[_rise_speed] || joy->buttons[_decrease_speed]))
     {
-        if(joy->axes[_change_speed] >= DEAD_ZONE)
+        if(joy->buttons[_rise_speed])
             _msg_changeSpeed.speed = RISE_SPEED;
-        if(joy->axes[_change_speed] <= - DEAD_ZONE)
+        if(joy->buttons[_decrease_speed])
             _msg_changeSpeed.speed = DECREASE_SPEED;
 
         _new_speed_msg = true;
@@ -100,11 +107,11 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 
     /*****************  HEIGHT ********* CROSS PAD *****************************/ 
     if(!joy->buttons[_action_button] &&
-      (joy->axes[_change_height] > DEAD_ZONE || joy->axes[_change_height] < - DEAD_ZONE))
+      (joy->buttons[_rise_height] || joy->buttons[_decrease_height]))
     {
-        if(joy->axes[_change_height] >= DEAD_ZONE)
+        if(joy->buttons[_rise_height])
             _msg_height.height = DECREASE_HEIGHT;
-        if(joy->axes[_change_height] <= - DEAD_ZONE)
+        if(joy->buttons[_decrease_height])
             _msg_height.height = RISE_HEIGHT;
         
         _new_height_msg = true;
@@ -112,11 +119,11 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 
     /*****************  FOOT ********* CROSS PAD + R2 ************************/ 
     if(joy->buttons[_action_button] && 
-      (joy->axes[_change_foot] > DEAD_ZONE || joy->axes[_change_foot] < - DEAD_ZONE))
+      (joy->buttons[_rise_foot] || joy->buttons[_decrease_foot]))
     {
-        if(joy->axes[_change_foot] >= DEAD_ZONE)
+        if(joy->buttons[_rise_foot])
             _msg_foot.footDistance = RISE_FOOT;
-        if(joy->axes[_change_foot] <= - DEAD_ZONE)
+        if(joy->buttons[_decrease_foot])
             _msg_foot.footDistance = DECREASE_FOOT;
 
         _new_foot_msg = true;
@@ -124,11 +131,11 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 
     /*****************  STEP ********* CROSS PAD + R2 ************************/ 
     if(joy->buttons[_action_button] && 
-      (joy->axes[_change_step] > DEAD_ZONE || joy->axes[_change_step] < - DEAD_ZONE))
+      (joy->buttons[_rise_step] || joy->buttons[_decrease_step]))
     {
-        if(joy->axes[_change_step] >= DEAD_ZONE)
+        if(joy->buttons[_rise_step])
             _msg_step.data = false;
-        if(joy->axes[_change_step] <= - DEAD_ZONE)
+        if(joy->buttons[_decrease_step])
             _msg_step.data = true;
 
         _new_step_msg = true;

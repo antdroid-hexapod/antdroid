@@ -138,10 +138,17 @@ private:
     int _rotate_right;
     int _rotate_left;
 
-    int _change_speed;
-    int _change_height;
-    int _change_foot;
-    int _change_step;
+    int _rise_speed;
+    int _decrease_speed;
+
+    int _rise_height;
+    int _decrease_height;
+
+    int _rise_foot;
+    int _decrease_foot;
+
+    int _rise_step;
+    int _decrease_step;
 
     int _change_gait;
     
