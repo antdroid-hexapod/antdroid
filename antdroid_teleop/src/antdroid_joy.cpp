@@ -249,13 +249,13 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
     }
 
     /*****************  BALANCE ACCELEROMETERS ********************************/
-    if(joy->buttons[_balance_mode] && (
+    if(joy->buttons[_balance_mode] )/*&& (
         joy->axes[_balance_accel_pitch] ||
         joy->axes[_balance_accel_roll] || 
-        joy->axes[_balance_gyro_yaw]))
+        joy->axes[_balance_gyro_yaw]))*/
     {
 
-        _pitch = joy->axes[_balance_accel_pitch];
+        /*_pitch = joy->axes[_balance_accel_pitch];
             if(_pitch > DEAD_ZONE)         _pitch = 1;
             else if(_pitch < - DEAD_ZONE)  _pitch = -1;
             else                           _pitch = 0;
@@ -271,7 +271,13 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
             else                         _yaw = 0;
 
         ROS_INFO("_pitch, roll, yaw: %d, %d, %d", _pitch, _roll, _yaw);
-        _new_balance_accel_msg = true;
+        _new_balance_accel_msg = true;*/
+
+        int var1 = joy->axes[_balance_accel_pitch];
+        int var2 = joy->axes[_balance_accel_roll];
+        int var3 = joy->axes[_balance_gyro_yaw];
+        ROS_INFO("pitch, roll, yaw: %d, %d, %d", var1, var2, var3);
+
     }
 
     /*if(joy->buttons[_balance_mode] && (
