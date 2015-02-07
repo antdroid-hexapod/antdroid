@@ -80,7 +80,8 @@ AntdroidTeleop::AntdroidTeleop():
     _new_balance_default_msg(false),
     _new_attack_msg         (false),
     _new_engage_msg         (false),
-    _new_disengage_msg      (false)
+    _new_disengage_msg      (false),
+    _new_balance_accel_msg  (false)
 {      
  
     sub_joy = _nh.subscribe<sensor_msgs::Joy>("joy", 1, &AntdroidTeleop::joyCallback, this);
@@ -267,8 +268,9 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
         _yaw = joy->axes[_balance_gyro_yaw];
             if(_yaw > DEAD_ZONE)         _yaw = 1;
             else if(_yaw < -DEAD_ZONE)   _yaw = -1;
-            else                         _yaw = 0;  
+            else                         _yaw = 0;
 
+        ROS_INFO("_pitch, roll, yaw: %d, %d, %d", _pitch, _roll, _yaw);
         _new_balance_accel_msg = true;
     }
 
@@ -287,7 +289,7 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 
         _new_balance_default_msg = true;
     }*/
-        
+
     /*****************  ATTACK ************************************************/
     /*if(joy->buttons[_attack])
     {
@@ -366,6 +368,7 @@ void AntdroidTeleop::publish()
     if(_new_balance_msg)
     {
         ROS_INFO_STREAM("publish:: balance");
+        
         manageBalance();
         _pub_balance.publish(_msg_balance);
         _new_balance_msg = false;
@@ -374,9 +377,8 @@ void AntdroidTeleop::publish()
     if(_new_balance_z_msg)
     {
         ROS_INFO_STREAM("publish:: balance z");
+        
         manageBalance();
-        /*ROS_INFO("msg_balance [pitch, roll, yaw]: [ %d, %d, %d]", 
-            _msg_balance.pitch, _msg_balance.roll,_msg_balance.yaw);*/
         _pub_balance.publish(_msg_balance);
         _new_balance_z_msg = false;
     }
@@ -384,11 +386,20 @@ void AntdroidTeleop::publish()
     if(_new_balance_default_msg)
     {
         ROS_INFO_STREAM("publish:: balance default");
-        /*ROS_INFO("msg_balance [pitch, roll, yaw]: [ %d, %d, %d]", 
-            _msg_balance.pitch, _msg_balance.roll,_msg_balance.yaw);*/
 
         _pub_balance.publish(_msg_balance);
         _new_balance_default_msg = false;
+    }
+
+    if(_new_balance_accel_msg)
+    {
+        ROS_INFO_STREAM("publish:: balance accel");
+        ROS_INFO("msg_balance [pitch, roll, yaw]: [ %d, %d, %d]", 
+            _msg_balance.pitch, _msg_balance.roll,_msg_balance.yaw);
+        
+        manageBalance();
+        _pub_balance.publish(_msg_balance);
+        _new_balance_accel_msg = false;
     }
 /*
     if(_new_attack_msg)
