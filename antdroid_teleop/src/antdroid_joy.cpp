@@ -249,34 +249,31 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
     }
 
     /*****************  BALANCE ACCELEROMETERS ********************************/
-    if(joy->buttons[_balance_mode] )/*&& (
+    if(joy->buttons[_balance_mode]  && (
         joy->axes[_balance_accel_pitch] ||
         joy->axes[_balance_accel_roll] || 
-        joy->axes[_balance_gyro_yaw]))*/
+        joy->axes[_balance_gyro_yaw]))
     {
 
-        /*_pitch = joy->axes[_balance_accel_pitch];
-            if(_pitch > DEAD_ZONE)         _pitch = 1;
-            else if(_pitch < - DEAD_ZONE)  _pitch = -1;
-            else                           _pitch = 0;
+        _pitch = joy->axes[_balance_accel_pitch];
+            if(_pitch > DEAD_ZONE_ACCEL)         _pitch = 1;
+            else if(_pitch < - DEAD_ZONE_ACCEL)  _pitch = -1;
+            else                                 _pitch = 0;
         
         _roll = joy->axes[_balance_accel_roll];
-            if(_roll > DEAD_ZONE)         _roll = 1;
-            else if(_roll < -DEAD_ZONE)   _roll = -1;
-            else                          _roll = 0;
+            if(_roll > DEAD_ZONE_ACCEL)         _roll = 1;
+            else if(_roll < -DEAD_ZONE_ACCEL)   _roll = -1;
+            else                                _roll = 0;
 
-        _yaw = joy->axes[_balance_gyro_yaw];
-            if(_yaw > DEAD_ZONE)         _yaw = 1;
-            else if(_yaw < -DEAD_ZONE)   _yaw = -1;
-            else                         _yaw = 0;
+        _yaw = 0;
 
         ROS_INFO("_pitch, roll, yaw: %d, %d, %d", _pitch, _roll, _yaw);
-        _new_balance_accel_msg = true;*/
+        _new_balance_accel_msg = true;
 
-        float var1 = joy->axes[_balance_accel_pitch];
+        /*float var1 = joy->axes[_balance_accel_pitch];
         float var2 = joy->axes[_balance_accel_roll];
         float var3 = joy->axes[_balance_gyro_yaw];
-        ROS_INFO("pitch, roll, yaw: %f, %f, %f", var1, var2, var3);
+        ROS_INFO("pitch, roll, yaw: %f, %f, %f", var1, var2, var3);*/
 
     }
 

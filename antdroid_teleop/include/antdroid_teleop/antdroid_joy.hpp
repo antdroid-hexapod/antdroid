@@ -94,8 +94,9 @@
 #define ROTATE_LEFT         1
 #define ROTATE_RIGHT        -1
 
-#define ANGLE_STEP  20
-#define DEAD_ZONE   0.5
+#define ANGLE_STEP      20
+#define DEAD_ZONE       0.5
+#define DEAD_ZONE_ACCEL 0.1
 
 #define TRIPOD_MODE 1
 #define RIPPLE_MODE 2
