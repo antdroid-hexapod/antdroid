@@ -273,9 +273,9 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
         ROS_INFO("_pitch, roll, yaw: %d, %d, %d", _pitch, _roll, _yaw);
         _new_balance_accel_msg = true;*/
 
-        int var1 = joy->axes[_balance_accel_pitch];
-        int var2 = joy->axes[_balance_accel_roll];
-        int var3 = joy->axes[_balance_gyro_yaw];
+        float var1 = joy->axes[_balance_accel_pitch];
+        float var2 = joy->axes[_balance_accel_roll];
+        float var3 = joy->axes[_balance_gyro_yaw];
         ROS_INFO("pitch, roll, yaw: %f, %f, %f", var1, var2, var3);
 
     }
