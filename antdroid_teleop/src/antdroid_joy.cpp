@@ -42,13 +42,13 @@ AntdroidTeleop::AntdroidTeleop():
     _rise_step              (PS3_BUTTON_CROSS_RIGHT),
     _decrease_step          (PS3_BUTTON_CROSS_LEFT),
 
-    _walk_y                 (MI_STICK_IZQUIERDO_IZ_DER),
-    _walk_x                 (MI_STICK_IZQUIERDO_ARR_ABA),
+    _walk_y                 (PS3_AXIS_STICK_LEFT_LEFTWARDS),
+    _walk_x                 (PS3_AXIS_STICK_LEFT_UPWARDS),
     _change_gait            (PS3_BUTTON_STICK_LEFT),
 
-    _balance_x              (MI_STICK_DERECHO_ARR_ABA),
-    _balance_y              (MI_STICK_DERECHO_IZ_DER),
-    _balance_z              (MI_STICK_DERECHO_IZ_DER),
+    _balance_x              (PS3_AXIS_STICK_RIGHT_UPWARDS),
+    _balance_y              (PS3_AXIS_STICK_RIGHT_LEFTWARDS),
+    _balance_z              (PS3_AXIS_STICK_RIGHT_LEFTWARDS),
     _balance_default        (PS3_BUTTON_STICK_RIGHT),
 
     _attack                 (PS3_BUTTON_ACTION_TRIANGLE),
