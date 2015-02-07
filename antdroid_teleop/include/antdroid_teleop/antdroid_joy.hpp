@@ -95,31 +95,6 @@
 #define TRIPOD_MODE 1
 #define RIPPLE_MODE 2
 
-//Mi configuracion
- // Ver http://wiki.ros.org/joystick_remapper para remapear usando el xml
-
-#define MI_BOTON_CUADRADO       0
-#define MI_BOTON_EQUIS          1
-#define MI_BOTON_CIRCULO        2
-#define MI_BOTON_TRIANGULO      3
-#define MI_BOTON_L1             4
-#define MI_BOTON_R1             5 
-#define MI_BOTON_L2             6
-#define MI_BOTON_R2             7
-#define MI_BOTON_SELECT         8
-#define MI_BOTON_START          9
-#define MI_BOTON_L3             10
-#define MI_BOTON_R3             11
-#define MI_BOTON_PS             12
-
-#define MI_STICK_IZQUIERDO_IZ_DER   0
-#define MI_STICK_IZQUIERDO_ARR_ABA  1
-#define MI_STICK_DERECHO_IZ_DER     2
-#define MI_STICK_DERECHO_ARR_ABA    3
-#define MI_CRUCETA_IZ_DER           4
-#define MI_CRUCETA_ARR_ABA          5
-
-
 
 class AntdroidTeleop
 {
@@ -138,10 +113,17 @@ private:
     int _rotate_right;
     int _rotate_left;
 
-    int _change_speed;
-    int _change_height;
-    int _change_foot;
-    int _change_step;
+    int _rise_speed;
+    int _decrease_speed;
+
+    int _rise_height;
+    int _decrease_height;
+
+    int _rise_foot;
+    int _decrease_foot;
+
+    int _rise_step;
+    int _decrease_step;
 
     int _change_gait;
     
