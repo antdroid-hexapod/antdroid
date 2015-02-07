@@ -135,7 +135,12 @@ private:
     int _balance_z;
     int _balance_default;
 
+    int _balance_accel_pitch;
+    int _balance_accel_roll;
+    int _balance_gyro_yaw;
+
     int _action_button;
+    int _balance_mode;
 
     int _attack;
     int _engage;
@@ -155,6 +160,7 @@ private:
     bool _new_attack_msg;
     bool _new_engage_msg;
     bool _new_disengage_msg;
+    bool _new_balance_accel_msg;
 
     int _last_pitch;
     int _pitch;

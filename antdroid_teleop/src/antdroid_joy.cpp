@@ -56,6 +56,11 @@ AntdroidTeleop::AntdroidTeleop():
     _disengage              (PS3_BUTTON_SELECT),
 
     _action_button          (PS3_BUTTON_REAR_RIGHT_2),
+    _balance_mode           (PS3_BUTTON_REAR_LEFT_2),
+
+    _balance_accel_pitch    (PS3_AXIS_ACCELEROMETER_FORWARD),
+    _balance_accel_roll     (PS3_AXIS_ACCELEROMETER_LEFT),
+    _balance_gyro_yaw       (PS3_AXIS_GYRO_YAW),
 
     _last_pitch             (0),
     _last_roll              (0),
@@ -194,7 +199,7 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
         _new_rotate_msg = true;
     }
 
-    /*****************  BALANCE ***********************************************/
+    /*****************  BALANCE JOYSTICK***************************************/
     if(!joy->buttons[_action_button] &&
       (joy->axes[_balance_x] || joy->axes[_balance_y]))
     {
@@ -242,6 +247,47 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
         _new_balance_default_msg = true;
     }
 
+    /*****************  BALANCE ACCELEROMETERS ********************************/
+    if(joy->buttons[_balance_mode] && (
+        joy->axes[_balance_accel_pitch] ||
+        joy->axes[_balance_accel_roll] || 
+        joy->axes[_balance_gyro_yaw]))
+    {
+
+        _pitch = joy->axes[_balance_accel_pitch];
+            if(_pitch > DEAD_ZONE)         _pitch = 1;
+            else if(_pitch < - DEAD_ZONE)  _pitch = -1;
+            else                           _pitch = 0;
+        
+        _roll = joy->axes[_balance_accel_roll];
+            if(_roll > DEAD_ZONE)         _roll = 1;
+            else if(_roll < -DEAD_ZONE)   _roll = -1;
+            else                          _roll = 0;
+
+        _yaw = joy->axes[_balance_gyro_yaw];
+            if(_yaw > DEAD_ZONE)         _yaw = 1;
+            else if(_yaw < -DEAD_ZONE)   _yaw = -1;
+            else                         _yaw = 0;  
+
+        _new_balance_accel_msg = true;
+    }
+
+    /*if(joy->buttons[_balance_mode] && (
+        !joy->axes[_balance_accel_pitch] &&
+        !joy->axes[_balance_accel_roll] &&
+        !joy->axes[_balance_gyro_yaw]))
+    {
+        _msg_balance.pitch = 0;
+        _msg_balance.roll = 0;
+        _msg_balance.yaw = 0;
+
+        _last_pitch = 0;
+        _last_roll = 0;
+        _last_yaw = 0;
+
+        _new_balance_default_msg = true;
+    }*/
+        
     /*****************  ATTACK ************************************************/
     /*if(joy->buttons[_attack])
     {
