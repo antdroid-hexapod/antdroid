@@ -42,6 +42,9 @@ AntdroidTeleop::AntdroidTeleop():
     _rise_step              (PS3_BUTTON_CROSS_RIGHT),
     _decrease_step          (PS3_BUTTON_CROSS_LEFT),
 
+    _rise_sens_accel        (PS3_BUTTON_CROSS_UP),
+    _decrease_sens_accel    (PS3_BUTTON_CROSS_DOWN),
+
     _walk_y                 (PS3_AXIS_STICK_LEFT_LEFTWARDS),
     _walk_x                 (PS3_AXIS_STICK_LEFT_UPWARDS),
     _change_gait            (PS3_BUTTON_STICK_LEFT),
@@ -67,6 +70,7 @@ AntdroidTeleop::AntdroidTeleop():
     _last_yaw               (0),
 
     _gait_type              (1),
+    _dead_zone_accel        (0.1),
 
     _new_balance_msg        (false),
     _new_balance_z_msg      (false),
@@ -253,24 +257,21 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
         joy->axes[_balance_accel_pitch] ||
         joy->axes[_balance_accel_roll]))
     {
-            if(joy->axes[_balance_accel_pitch] < - DEAD_ZONE_ACCEL)
+            if(joy->axes[_balance_accel_pitch] < - _dead_zone_accel)
                 _pitch = 1;
-            else if(joy->axes[_balance_accel_pitch] > DEAD_ZONE_ACCEL)
+            else if(joy->axes[_balance_accel_pitch] > _dead_zone_accel)
                 _pitch = -1;
             else
                 _pitch = 0;
         
-            if(joy->axes[_balance_accel_roll] < - DEAD_ZONE_ACCEL)
+            if(joy->axes[_balance_accel_roll] < - _dead_zone_accel)
                 _roll = 1;
-            else if(joy->axes[_balance_accel_roll] > DEAD_ZONE_ACCEL)
+            else if(joy->axes[_balance_accel_roll] > _dead_zone_accel)
                 _roll = -1;
             else
                 _roll = 0;
 
         _yaw = 0;
-
-        ROS_INFO("pitch, roll, yaw: %d, %d, %d", _pitch, _roll, _yaw);
-        _new_balance_accel_msg = true;
     }
 
     if(joy->buttons[_balance_mode] && (
@@ -286,6 +287,17 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
         _last_yaw = 0;
 
         _new_balance_default_msg = true;
+    }
+
+    if(joy->buttons[_balance_mode] && (
+        joy->buttons[_rise_sens_accel] || joy->buttons[_decrease_sens_accel]))
+    {
+        if(joy->buttons[_rise_sens_accel] && _dead_zone_accel < 0.15)
+            _dead_zone_accel += 0.01;
+        if(joy->buttons[_decrease_sens_accel] && _dead_zone_accel > - 0.15)
+            _dead_zone_accel -= 0.01;
+
+        ROS_INFO("Dead zone accel: %f", _dead_zone_accel);
     }
 
     /*****************  ATTACK ************************************************/

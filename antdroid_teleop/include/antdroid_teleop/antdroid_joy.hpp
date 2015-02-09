@@ -96,7 +96,6 @@
 
 #define ANGLE_STEP      20
 #define DEAD_ZONE       0.5
-#define DEAD_ZONE_ACCEL 0.1
 
 #define TRIPOD_MODE 1
 #define RIPPLE_MODE 2
@@ -132,6 +131,9 @@ private:
     int _decrease_step;
 
     int _change_gait;
+
+    int _rise_sens_accel;
+    int _decrease_sens_accel;
     
     int _walk_x;
     int _walk_y;
@@ -152,6 +154,7 @@ private:
     int _engage;
     int _disengage;
 
+    float _dead_zone_accel;
 
     bool _new_balance_msg;
     bool _new_balance_z_msg;
