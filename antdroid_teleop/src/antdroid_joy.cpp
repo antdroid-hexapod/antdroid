@@ -253,16 +253,16 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
         joy->axes[_balance_accel_pitch] ||
         joy->axes[_balance_accel_roll]))
     {
-            if(joy->axes[_balance_accel_pitch] > DEAD_ZONE_ACCEL)
+            if(joy->axes[_balance_accel_pitch] < - DEAD_ZONE_ACCEL)
                 _pitch = 1;
-            else if(joy->axes[_balance_accel_pitch] < - DEAD_ZONE_ACCEL)
+            else if(joy->axes[_balance_accel_pitch] > DEAD_ZONE_ACCEL)
                 _pitch = -1;
             else
                 _pitch = 0;
         
-            if(joy->axes[_balance_accel_roll] > DEAD_ZONE_ACCEL)
+            if(joy->axes[_balance_accel_roll] < - DEAD_ZONE_ACCEL)
                 _roll = 1;
-            else if(joy->axes[_balance_accel_roll] < -DEAD_ZONE_ACCEL)
+            else if(joy->axes[_balance_accel_roll] > DEAD_ZONE_ACCEL)
                 _roll = -1;
             else
                 _roll = 0;
