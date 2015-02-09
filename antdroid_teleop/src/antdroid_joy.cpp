@@ -257,8 +257,6 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
         joy->axes[_balance_accel_pitch] ||
         joy->axes[_balance_accel_roll]))
     {
-            ROS_INFO_STREAM("In balance accelerometers");
-            
             if(joy->axes[_balance_accel_pitch] < - _dead_zone_accel)
                 _pitch = 1;
             else if(joy->axes[_balance_accel_pitch] > _dead_zone_accel)
@@ -274,6 +272,8 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
                 _roll = 0;
 
         _yaw = 0;
+
+        _new_balance_accel_msg = true;
     }
 
     if(joy->buttons[_balance_mode] && (
