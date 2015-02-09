@@ -293,9 +293,9 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
         joy->buttons[_rise_sens_accel] || joy->buttons[_decrease_sens_accel]))
     {
         if(joy->buttons[_rise_sens_accel] && _dead_zone_accel < 0.15)
-            _dead_zone_accel += 0.01;
-        if(joy->buttons[_decrease_sens_accel] && _dead_zone_accel > - 0.15)
-            _dead_zone_accel -= 0.01;
+            _dead_zone_accel += 0.005;
+        if(joy->buttons[_decrease_sens_accel] && _dead_zone_accel > 0.05)
+            _dead_zone_accel -= 0.005;
 
         ROS_INFO("Dead zone accel: %f", _dead_zone_accel);
     }
