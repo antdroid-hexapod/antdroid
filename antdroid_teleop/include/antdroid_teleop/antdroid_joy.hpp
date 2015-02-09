@@ -179,7 +179,6 @@ private:
 
     int _max_angle_step;
 
-
     ros::Subscriber sub_joy;
 
     ros::Publisher  _pub_balance;

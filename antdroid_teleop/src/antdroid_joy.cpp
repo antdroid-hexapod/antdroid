@@ -254,20 +254,23 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
         joy->axes[_balance_accel_roll] || 
         joy->axes[_balance_gyro_yaw]))
     {
-
-        _pitch = joy->axes[_balance_accel_pitch];
-            if(_pitch > DEAD_ZONE_ACCEL)         _pitch = 1;
-            else if(_pitch < - DEAD_ZONE_ACCEL)  _pitch = -1;
-            else                                 _pitch = 0;
+            if(joy->axes[_balance_accel_pitch] > DEAD_ZONE_ACCEL)         
+                _pitch = 1;
+            else if(joy->axes[_balance_accel_pitch] < - DEAD_ZONE_ACCEL) 
+                _pitch = -1;
+            else
+                _pitch = 0;
         
-        _roll = joy->axes[_balance_accel_roll];
-            if(_roll > DEAD_ZONE_ACCEL)         _roll = 1;
-            else if(_roll < -DEAD_ZONE_ACCEL)   _roll = -1;
-            else                                _roll = 0;
+            if(joy->axes[_balance_accel_roll] > DEAD_ZONE_ACCEL)         
+                _roll = 1;
+            else if(joy->axes[_balance_accel_roll] < -DEAD_ZONE_ACCEL)   
+                _roll = -1;
+            else
+                _roll = 0;
 
         _yaw = 0;
 
-        ROS_INFO("_pitch, roll, yaw: %d, %d, %d", _pitch, _roll, _yaw);
+        ROS_INFO("pitch, roll, yaw: %d, %d, %d", _pitch, _roll, _yaw);
         _new_balance_accel_msg = true;
 
         /*float var1 = joy->axes[_balance_accel_pitch];
