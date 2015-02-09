@@ -443,7 +443,17 @@ int AntdroidTeleop::updateAngle(int axis, int last_angle)
 int main(int argc, char** argv)
 {
     ros::init(argc, argv, "antdroid_teleop");
+    ros::Rate loop_rate(SPIN_FRECUENCY);
+
     AntdroidTeleop antdroid_teleop;
 
-    ros::spin();
+    while(ros::ok())
+    {
+        ros::spinOnce();
+        loop_rate.sleep();
+    }
+
+    ROS_INFO_STREAM("Program exiting");
+
+    return 0;
 }

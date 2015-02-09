@@ -33,8 +33,8 @@
 #include <antdroid_msgs/Balance.h>
 
 
+/***** PS3 BUTTONS AND AXES DEFINES ********************************/
 
- 
 #define PS3_BUTTON_SELECT            0
 #define PS3_BUTTON_STICK_LEFT        1
 #define PS3_BUTTON_STICK_RIGHT       2
@@ -74,10 +74,12 @@
 //#define PS3_AXIS_ACCELEROMETER_UP        18
 #define PS3_AXIS_GYRO_YAW                19
 
-
 #define PS3_AXIS_ACCELEROMETER_LEFT      23
 #define PS3_AXIS_ACCELEROMETER_FORWARD   24
 #define PS3_AXIS_ACCELEROMETER_UP        25
+
+
+/*******************************************************************/
 
 #define DECREASE_SPEED      0
 #define RISE_SPEED          1
@@ -94,12 +96,13 @@
 #define ROTATE_LEFT         1
 #define ROTATE_RIGHT        -1
 
-#define ANGLE_STEP      20
-#define DEAD_ZONE       0.5
-
 #define TRIPOD_MODE 1
 #define RIPPLE_MODE 2
 
+#define ANGLE_STEP      20
+#define DEAD_ZONE       0.5
+
+#define SPIN_FRECUENCY  4
 
 class AntdroidTeleop
 {
