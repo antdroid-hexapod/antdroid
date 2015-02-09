@@ -251,19 +251,18 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
     /*****************  BALANCE ACCELEROMETERS ********************************/
     if(joy->buttons[_balance_mode]  && (
         joy->axes[_balance_accel_pitch] ||
-        joy->axes[_balance_accel_roll] || 
-        joy->axes[_balance_gyro_yaw]))
+        joy->axes[_balance_accel_roll]))
     {
-            if(joy->axes[_balance_accel_pitch] > DEAD_ZONE_ACCEL)         
+            if(joy->axes[_balance_accel_pitch] > DEAD_ZONE_ACCEL)
                 _pitch = 1;
-            else if(joy->axes[_balance_accel_pitch] < - DEAD_ZONE_ACCEL) 
+            else if(joy->axes[_balance_accel_pitch] < - DEAD_ZONE_ACCEL)
                 _pitch = -1;
             else
                 _pitch = 0;
         
-            if(joy->axes[_balance_accel_roll] > DEAD_ZONE_ACCEL)         
+            if(joy->axes[_balance_accel_roll] > DEAD_ZONE_ACCEL)
                 _roll = 1;
-            else if(joy->axes[_balance_accel_roll] < -DEAD_ZONE_ACCEL)   
+            else if(joy->axes[_balance_accel_roll] < -DEAD_ZONE_ACCEL)
                 _roll = -1;
             else
                 _roll = 0;
@@ -272,18 +271,11 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 
         ROS_INFO("pitch, roll, yaw: %d, %d, %d", _pitch, _roll, _yaw);
         _new_balance_accel_msg = true;
-
-        /*float var1 = joy->axes[_balance_accel_pitch];
-        float var2 = joy->axes[_balance_accel_roll];
-        float var3 = joy->axes[_balance_gyro_yaw];
-        ROS_INFO("pitch, roll, yaw: %f, %f, %f", var1, var2, var3);*/
-
     }
 
-    /*if(joy->buttons[_balance_mode] && (
+    if(joy->buttons[_balance_mode] && (
         !joy->axes[_balance_accel_pitch] &&
-        !joy->axes[_balance_accel_roll] &&
-        !joy->axes[_balance_gyro_yaw]))
+        !joy->axes[_balance_accel_roll]))
     {
         _msg_balance.pitch = 0;
         _msg_balance.roll = 0;
@@ -294,7 +286,7 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
         _last_yaw = 0;
 
         _new_balance_default_msg = true;
-    }*/
+    }
 
     /*****************  ATTACK ************************************************/
     /*if(joy->buttons[_attack])
@@ -400,8 +392,6 @@ void AntdroidTeleop::publish()
     if(_new_balance_accel_msg)
     {
         ROS_INFO_STREAM("publish:: balance accel");
-        ROS_INFO("msg_balance [pitch, roll, yaw]: [ %d, %d, %d]", 
-            _msg_balance.pitch, _msg_balance.roll,_msg_balance.yaw);
         
         manageBalance();
         _pub_balance.publish(_msg_balance);
