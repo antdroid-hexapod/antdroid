@@ -61,9 +61,9 @@ AntdroidTeleop::AntdroidTeleop():
     _action_button          (PS3_BUTTON_REAR_RIGHT_2),
     _balance_mode           (PS3_BUTTON_REAR_LEFT_2),
 
-    _balance_accel_pitch    (PS3_AXIS_ACCELEROMETER_FORWARD_COMP),
-    _balance_accel_roll     (PS3_AXIS_ACCELEROMETER_LEFT_COMP),
-    _balance_gyro_yaw       (PS3_AXIS_ACCELEROMETER_UP_COMP),
+    _balance_accel_pitch    (PS3_AXIS_ACCELEROMETER_FORWARD),
+    _balance_accel_roll     (PS3_AXIS_ACCELEROMETER_LEFT),
+    _balance_gyro_yaw       (PS3_AXIS_ACCELEROMETER_UP),
 
     _last_pitch             (0),
     _last_roll              (0),
@@ -284,7 +284,7 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
         if(joy->buttons[_decrease_sens_accel] && _dead_zone_accel > 0.05)
             _dead_zone_accel -= 0.001;
 
-        ROS_INFO("Dead zone accel: %f", _dead_zone_accel*1000 - 50);
+        ROS_INFO("Sensitivity: %f", -(_dead_zone_accel*1000 - 50));
     }
 
     /*****************  ATTACK ************************************************/
