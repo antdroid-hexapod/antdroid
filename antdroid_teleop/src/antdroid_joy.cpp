@@ -280,15 +280,11 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
         !joy->axes[_balance_accel_pitch] &&
         !joy->axes[_balance_accel_roll]))
     {
-        _msg_balance.pitch = 0;
-        _msg_balance.roll = 0;
-        _msg_balance.yaw = 0;
+        _pitch = 0;
+        _roll = 0;
+        _yaw = 0;
 
-        _last_pitch = 0;
-        _last_roll = 0;
-        _last_yaw = 0;
-
-        _new_balance_default_msg = true;
+        _new_balance_accel_msg = true;
     }
 
     if(joy->buttons[_balance_mode] && (
@@ -299,7 +295,7 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
         if(joy->buttons[_decrease_sens_accel] && _dead_zone_accel > 0.05)
             _dead_zone_accel -= 0.001;
 
-        ROS_INFO("Dead zone accel: %f", _dead_zone_accel);
+        ROS_INFO("Dead zone accel: %f", _dead_zone_accel*100 - 50);
     }
 
     /*****************  ATTACK ************************************************/
