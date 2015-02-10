@@ -102,7 +102,6 @@
 #define ANGLE_STEP      20
 #define DEAD_ZONE       0.5
 
-#define SPIN_FRECUENCY  4
 
 class AntdroidTeleop
 {

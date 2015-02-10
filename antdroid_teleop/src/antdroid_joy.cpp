@@ -98,7 +98,7 @@ AntdroidTeleop::AntdroidTeleop():
     _pub_speed       = _ph.advertise<antdroid_msgs::Speed>("speed", 1);
     _pub_step        = _ph.advertise<std_msgs::Bool>("step", 1);
 
-    _timer = _nh.createTimer(ros::Duration(0.1), boost::bind(&AntdroidTeleop::publish, this));
+    _timer = _nh.createTimer(ros::Duration(0.5), boost::bind(&AntdroidTeleop::publish, this));
 }
 
 void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
@@ -443,17 +443,10 @@ int AntdroidTeleop::updateAngle(int axis, int last_angle)
 int main(int argc, char** argv)
 {
     ros::init(argc, argv, "antdroid_teleop");
-    ros::Rate loop_rate(SPIN_FRECUENCY);
-
     AntdroidTeleop antdroid_teleop;
 
-    while(ros::ok())
-    {
-        ros::spinOnce();
-        loop_rate.sleep();
-    }
+    ros::spin();
 
     ROS_INFO_STREAM("Program exiting");
-
     return 0;
 }
