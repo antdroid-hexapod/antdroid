@@ -70,7 +70,7 @@ AntdroidTeleop::AntdroidTeleop():
     _last_yaw               (0),
 
     _gait_type              (1),
-    _dead_zone_accel        (0.1),
+    _dead_zone_accel        (0.05),
 
     _new_balance_msg        (false),
     _new_balance_z_msg      (false),
@@ -98,7 +98,7 @@ AntdroidTeleop::AntdroidTeleop():
     _pub_speed       = _ph.advertise<antdroid_msgs::Speed>("speed", 1);
     _pub_step        = _ph.advertise<std_msgs::Bool>("step", 1);
 
-    _timer = _nh.createTimer(ros::Duration(0.1), boost::bind(&AntdroidTeleop::publish, this));
+    _timer = _nh.createTimer(ros::Duration(0.25), boost::bind(&AntdroidTeleop::publish, this));
 }
 
 void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
@@ -279,12 +279,12 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
     if(joy->buttons[_balance_mode] && (
         joy->buttons[_rise_sens_accel] || joy->buttons[_decrease_sens_accel]))
     {
-        if(joy->buttons[_rise_sens_accel] && _dead_zone_accel < 0.13)
+        if(joy->buttons[_rise_sens_accel] && _dead_zone_accel < 0.11)
             _dead_zone_accel += 0.005;
-        if(joy->buttons[_decrease_sens_accel] && _dead_zone_accel > 0.03)
+        if(joy->buttons[_decrease_sens_accel] && _dead_zone_accel > 0.1)
             _dead_zone_accel -= 0.005;
 
-        ROS_INFO("Sensitivity: %f", -(_dead_zone_accel*1000 - 30));
+        ROS_INFO("Sensitivity: %f", -(_dead_zone_accel*1000 - 10));
     }
 
     /*****************  ATTACK ************************************************/
