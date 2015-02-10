@@ -104,7 +104,7 @@ AntdroidTeleop::AntdroidTeleop():
 void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 { 
     /*****************  SPEED ********* CROSS PAD *****************************/    
-    if(!joy->buttons[_action_button] &&
+    if(!joy->buttons[_action_button] && !joy->buttons[_balance_mode] &&
       (joy->buttons[_rise_speed] || joy->buttons[_decrease_speed]))
     {
         if(joy->buttons[_rise_speed])
@@ -116,7 +116,7 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
     }
 
     /*****************  HEIGHT ********* CROSS PAD *****************************/ 
-    if(!joy->buttons[_action_button] &&
+    if(!joy->buttons[_action_button] && !joy->buttons[_balance_mode] &&
       (joy->buttons[_rise_height] || joy->buttons[_decrease_height]))
     {
         if(joy->buttons[_rise_height])
