@@ -98,7 +98,7 @@ AntdroidTeleop::AntdroidTeleop():
     _pub_speed       = _ph.advertise<antdroid_msgs::Speed>("speed", 1);
     _pub_step        = _ph.advertise<std_msgs::Bool>("step", 1);
 
-    _timer = _nh.createTimer(ros::Duration(0.25), boost::bind(&AntdroidTeleop::publish, this));
+    _timer = _nh.createTimer(ros::Duration(0.1), boost::bind(&AntdroidTeleop::publish, this));
 }
 
 void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
@@ -445,7 +445,7 @@ int main(int argc, char** argv)
     ros::init(argc, argv, "antdroid_teleop");
     AntdroidTeleop antdroid_teleop;
 
-    ros::Rate loop_rate(4);
+    ros::Rate loop_rate(10);
 
     while(ros::ok())
     {
