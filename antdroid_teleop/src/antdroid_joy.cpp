@@ -42,6 +42,9 @@ AntdroidTeleop::AntdroidTeleop():
     _rise_step              (PS3_BUTTON_CROSS_RIGHT),
     _decrease_step          (PS3_BUTTON_CROSS_LEFT),
 
+    _rise_sens_accel        (PS3_BUTTON_CROSS_UP),
+    _decrease_sens_accel    (PS3_BUTTON_CROSS_DOWN),
+
     _walk_y                 (PS3_AXIS_STICK_LEFT_LEFTWARDS),
     _walk_x                 (PS3_AXIS_STICK_LEFT_UPWARDS),
     _change_gait            (PS3_BUTTON_STICK_LEFT),
@@ -56,12 +59,18 @@ AntdroidTeleop::AntdroidTeleop():
     _disengage              (PS3_BUTTON_SELECT),
 
     _action_button          (PS3_BUTTON_REAR_RIGHT_2),
+    _balance_mode           (PS3_BUTTON_REAR_LEFT_2),
+
+    _balance_accel_pitch    (PS3_AXIS_ACCELEROMETER_FORWARD),
+    _balance_accel_roll     (PS3_AXIS_ACCELEROMETER_LEFT),
+    _balance_gyro_yaw       (PS3_AXIS_ACCELEROMETER_UP),
 
     _last_pitch             (0),
     _last_roll              (0),
     _last_yaw               (0),
 
     _gait_type              (1),
+    _dead_zone_accel        (0.05),
 
     _new_balance_msg        (false),
     _new_balance_z_msg      (false),
@@ -75,7 +84,8 @@ AntdroidTeleop::AntdroidTeleop():
     _new_balance_default_msg(false),
     _new_attack_msg         (false),
     _new_engage_msg         (false),
-    _new_disengage_msg      (false)
+    _new_disengage_msg      (false),
+    _new_balance_accel_msg  (false)
 {      
  
     sub_joy = _nh.subscribe<sensor_msgs::Joy>("joy", 1, &AntdroidTeleop::joyCallback, this);
@@ -88,13 +98,13 @@ AntdroidTeleop::AntdroidTeleop():
     _pub_speed       = _ph.advertise<antdroid_msgs::Speed>("speed", 1);
     _pub_step        = _ph.advertise<std_msgs::Bool>("step", 1);
 
-    _timer = _nh.createTimer(ros::Duration(0.1), boost::bind(&AntdroidTeleop::publish, this));
+    _timer = _nh.createTimer(ros::Duration(0.25), boost::bind(&AntdroidTeleop::publish, this));
 }
 
 void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 { 
     /*****************  SPEED ********* CROSS PAD *****************************/    
-    if(!joy->buttons[_action_button] &&
+    if(!joy->buttons[_action_button] && !joy->buttons[_balance_mode] &&
       (joy->buttons[_rise_speed] || joy->buttons[_decrease_speed]))
     {
         if(joy->buttons[_rise_speed])
@@ -106,7 +116,7 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
     }
 
     /*****************  HEIGHT ********* CROSS PAD *****************************/ 
-    if(!joy->buttons[_action_button] &&
+    if(!joy->buttons[_action_button] && !joy->buttons[_balance_mode] &&
       (joy->buttons[_rise_height] || joy->buttons[_decrease_height]))
     {
         if(joy->buttons[_rise_height])
@@ -194,7 +204,7 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
         _new_rotate_msg = true;
     }
 
-    /*****************  BALANCE ***********************************************/
+    /*****************  BALANCE JOYSTICK***************************************/
     if(!joy->buttons[_action_button] &&
       (joy->axes[_balance_x] || joy->axes[_balance_y]))
     {
@@ -240,6 +250,42 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
         _last_yaw = 0;
 
         _new_balance_default_msg = true;
+    }
+
+    /*****************  BALANCE ACCELEROMETERS ********************************/
+    if(joy->buttons[_balance_mode]  && (
+        joy->axes[_balance_accel_pitch] ||
+        joy->axes[_balance_accel_roll]))
+    {
+            if(joy->axes[_balance_accel_pitch] < - _dead_zone_accel)
+                _pitch = 1;
+            else if(joy->axes[_balance_accel_pitch] > _dead_zone_accel)
+                _pitch = -1;
+            else
+                _pitch = 0;
+        
+            if(joy->axes[_balance_accel_roll] < - _dead_zone_accel)
+                _roll = 1;
+            else if(joy->axes[_balance_accel_roll] > _dead_zone_accel)
+                _roll = -1;
+            else
+                _roll = 0;
+
+        _yaw = 0;
+
+        _new_balance_accel_msg = true;
+    }
+
+    if(joy->buttons[_balance_mode] && (
+        joy->buttons[_rise_sens_accel] || joy->buttons[_decrease_sens_accel]))
+    {
+        if(joy->buttons[_decrease_sens_accel] && _dead_zone_accel < 0.10)
+            _dead_zone_accel += 0.005;
+
+        if(joy->buttons[_rise_sens_accel] && _dead_zone_accel > 0.005)
+            _dead_zone_accel -= 0.005;
+
+        ROS_INFO("Sensitivity: %d", (int)(100 - _dead_zone_accel * 1000));
     }
 
     /*****************  ATTACK ************************************************/
@@ -320,6 +366,7 @@ void AntdroidTeleop::publish()
     if(_new_balance_msg)
     {
         ROS_INFO_STREAM("publish:: balance");
+        
         manageBalance();
         _pub_balance.publish(_msg_balance);
         _new_balance_msg = false;
@@ -328,9 +375,8 @@ void AntdroidTeleop::publish()
     if(_new_balance_z_msg)
     {
         ROS_INFO_STREAM("publish:: balance z");
+        
         manageBalance();
-        /*ROS_INFO("msg_balance [pitch, roll, yaw]: [ %d, %d, %d]", 
-            _msg_balance.pitch, _msg_balance.roll,_msg_balance.yaw);*/
         _pub_balance.publish(_msg_balance);
         _new_balance_z_msg = false;
     }
@@ -338,11 +384,18 @@ void AntdroidTeleop::publish()
     if(_new_balance_default_msg)
     {
         ROS_INFO_STREAM("publish:: balance default");
-        /*ROS_INFO("msg_balance [pitch, roll, yaw]: [ %d, %d, %d]", 
-            _msg_balance.pitch, _msg_balance.roll,_msg_balance.yaw);*/
 
         _pub_balance.publish(_msg_balance);
         _new_balance_default_msg = false;
+    }
+
+    if(_new_balance_accel_msg)
+    {
+        ROS_INFO_STREAM("publish:: balance accel");
+        
+        manageBalance();
+        _pub_balance.publish(_msg_balance);
+        _new_balance_accel_msg = false;
     }
 /*
     if(_new_attack_msg)
@@ -393,5 +446,15 @@ int main(int argc, char** argv)
     ros::init(argc, argv, "antdroid_teleop");
     AntdroidTeleop antdroid_teleop;
 
-    ros::spin();
+    ros::Rate loop_rate(4);
+
+    while(ros::ok())
+    {
+        ros::spinOnce();
+        loop_rate.sleep();
+    }
+    //ros::spin();
+
+    ROS_INFO_STREAM("Program exiting");
+    return 0;
 }

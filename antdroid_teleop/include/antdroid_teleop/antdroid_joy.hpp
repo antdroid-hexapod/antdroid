@@ -33,8 +33,8 @@
 #include <antdroid_msgs/Balance.h>
 
 
+/***** PS3 BUTTONS AND AXES DEFINES ********************************/
 
- 
 #define PS3_BUTTON_SELECT            0
 #define PS3_BUTTON_STICK_LEFT        1
 #define PS3_BUTTON_STICK_RIGHT       2
@@ -69,10 +69,17 @@
 #define PS3_AXIS_BUTTON_ACTION_CIRCLE    13
 #define PS3_AXIS_BUTTON_ACTION_CROSS     14
 #define PS3_AXIS_BUTTON_ACTION_SQUARE    15
-#define PS3_AXIS_ACCELEROMETER_LEFT      16
-#define PS3_AXIS_ACCELEROMETER_FORWARD   17
-#define PS3_AXIS_ACCELEROMETER_UP        18
+//#define PS3_AXIS_ACCELEROMETER_LEFT      16
+//#define PS3_AXIS_ACCELEROMETER_FORWARD   17
+//#define PS3_AXIS_ACCELEROMETER_UP        18
 #define PS3_AXIS_GYRO_YAW                19
+
+#define PS3_AXIS_ACCELEROMETER_LEFT      23
+#define PS3_AXIS_ACCELEROMETER_FORWARD   24
+#define PS3_AXIS_ACCELEROMETER_UP        25
+
+
+/*******************************************************************/
 
 #define DECREASE_SPEED      0
 #define RISE_SPEED          1
@@ -89,11 +96,11 @@
 #define ROTATE_LEFT         1
 #define ROTATE_RIGHT        -1
 
-#define ANGLE_STEP  20
-#define DEAD_ZONE   0.5
-
 #define TRIPOD_MODE 1
 #define RIPPLE_MODE 2
+
+#define ANGLE_STEP      20
+#define DEAD_ZONE       0.5
 
 
 class AntdroidTeleop
@@ -126,6 +133,9 @@ private:
     int _decrease_step;
 
     int _change_gait;
+
+    int _rise_sens_accel;
+    int _decrease_sens_accel;
     
     int _walk_x;
     int _walk_y;
@@ -135,12 +145,18 @@ private:
     int _balance_z;
     int _balance_default;
 
+    int _balance_accel_pitch;
+    int _balance_accel_roll;
+    int _balance_gyro_yaw;
+
     int _action_button;
+    int _balance_mode;
 
     int _attack;
     int _engage;
     int _disengage;
 
+    float _dead_zone_accel;
 
     bool _new_balance_msg;
     bool _new_balance_z_msg;
@@ -155,6 +171,7 @@ private:
     bool _new_attack_msg;
     bool _new_engage_msg;
     bool _new_disengage_msg;
+    bool _new_balance_accel_msg;
 
     int _last_pitch;
     int _pitch;
@@ -166,7 +183,7 @@ private:
     int _gait_type;
 
     int _max_angle_step;
-
+      
 
     ros::Subscriber sub_joy;
 
