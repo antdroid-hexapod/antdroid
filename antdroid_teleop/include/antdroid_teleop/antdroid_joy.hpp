@@ -183,8 +183,7 @@ private:
     int _gait_type;
 
     int _max_angle_step;
-    
-    int _aux_sens;    
+      
 
     ros::Subscriber sub_joy;
 
