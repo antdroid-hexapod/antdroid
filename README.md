@@ -1,8 +1,3 @@
-Antdroid
-========
-Software for hexapod robot based in Arduino Mega.
-
-
 Wiki:
 ============================
 
