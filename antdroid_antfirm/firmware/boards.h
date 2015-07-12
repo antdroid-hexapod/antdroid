@@ -1,6 +1,6 @@
-/* Antfirm.h: main hexapod program.
+/* boards.h: defined board names
  *
- * Copyright (C) 2014 Alexander Gil and Javier Román
+ * Copyright (C) 2015 Alexander Gil and Javier Román
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,31 +17,14 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef Antfirm_h
-#define Antfirm_h
+#ifndef BOARDS_H
+#define BOARDS_H
+#define BOARD_UNKNOWN -1
 
-#include <ServoEx.h>
-
-#include "Arduino.h"
-
-#include "boards.h"
-#include "Configuration.h"
-#include "pins.h"
-#include "leg.h"
-#include "hexapod.h"
-#include "calibration.h"
-#include "log.h"
-
-#ifdef ControlRos
-    #include "ros.h"
-    #include "controlRos.h"
-#endif
-
-#ifdef ControlSerial
-#include "controlSerial.h"
-#endif
+#define BOARD_ANTDROID      1
+#define BOARD_PROTOTIPE     2
 
 
+#define MB(board) (MOTHERBOARD==BOARD_##board)
 
-
-#endif
+#endif //BOARDS_H

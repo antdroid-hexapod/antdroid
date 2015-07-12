@@ -10,7 +10,7 @@ link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../lib)
 
 generate_arduino_firmware(antfirm
     SRCS Antfirm.cpp calibration.cpp controlRos.cpp controlSerial.cpp hexapod.cpp leg.cpp log.cpp trig.cpp ${ROS_LIB_DIR}/time.cpp ${ROS_LIB_DIR}/duration.cpp
-    HDRS Configuration.h calibration.h controlRos.h controlSerial.h hexapod.h leg.h log.h trig.h uncopyable.h
+    HDRS boards.h Configuration.h calibration.h controlRos.h controlSerial.h hexapod.h leg.h log.h pins.h trig.h uncopyable.h
     BOARD mega2560
     PORT /dev/ttyACM0
 )
