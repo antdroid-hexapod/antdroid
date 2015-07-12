@@ -23,29 +23,29 @@
 #define pins_h
 
 #if MB(ANTDROID)
-    #define LeftFrontCoxaPin        52
-    #define LeftFrontFemurPin       53
-    #define LeftFrontTibiaPin       51
+    #define LeftFrontCoxaPin        22
+    #define LeftFrontFemurPin       23
+    #define LeftFrontTibiaPin       24
 
-    #define RightFrontCoxaPin       49
-    #define RightFrontFemurPin      48
-    #define RightFrontTibiaPin      47
+    #define RightFrontCoxaPin       53
+    #define RightFrontFemurPin      52
+    #define RightFrontTibiaPin      51
 
-    #define LeftMiddleCoxaPin       46
-    #define LeftMiddleFemurPin      45
-    #define LeftMiddleTibiaPin      44
+    #define LeftMiddleCoxaPin       25
+    #define LeftMiddleFemurPin      26
+    #define LeftMiddleTibiaPin      27
 
-    #define RightMiddleCoxaPin      43
-    #define RightMiddleFemurPin     42
-    #define RightMiddleTibiaPin     41
+    #define RightMiddleCoxaPin      50
+    #define RightMiddleFemurPin     49
+    #define RightMiddleTibiaPin     48
 
-    #define LeftRearCoxaPin         40
-    #define LeftRearFemurPin        39
-    #define LeftRearTibiaPin        38
+    #define LeftRearCoxaPin         28
+    #define LeftRearFemurPin        29
+    #define LeftRearTibiaPin        30
 
-    #define RightRearCoxaPin        37
-    #define RightRearFemurPin       36
-    #define RightRearTibiaPin       35
+    #define RightRearCoxaPin        47
+    #define RightRearFemurPin       46
+    #define RightRearTibiaPin       45
 
 #endif
 
