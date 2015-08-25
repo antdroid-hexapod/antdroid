@@ -47,6 +47,11 @@
     #define RightRearFemurPin       46
     #define RightRearTibiaPin       45
 
+    #define ServoAuxPin             34
+
+    #define VoltageInPin            "A0"
+    #define ServoOnPin              13
+
 #endif
 
 #if MB(PROTOTIPE)
