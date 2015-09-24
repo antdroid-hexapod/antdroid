@@ -74,6 +74,9 @@ ros::Subscriber<antdroid_msgs::MoveLeg> moveLeg("MoveLeg", &ControlMoveLeg);
 std_msgs::Bool is_new_message;
 ros::Publisher pub_is_new_message("NewMessage", &is_new_message);
 
+std_msgs::UInt8 voltage;
+ros::Publisher pub_sensors_reading("SensorsReading", &voltage);
+
 Control::Control(Hexapod* Antdroid)                                   
 {
     is_new_message.data = true;
@@ -95,6 +98,7 @@ void Control::Start(void)
     arduino.subscribe(moveLeg);
 
     arduino.advertise(pub_is_new_message);
+    arduino.advertise(pub_sensors_reading);
 
     level_log = 3;
 
@@ -103,6 +107,8 @@ void Control::Start(void)
 void Control::ReadInput(void)
 {
     arduino.spinOnce();
+    
+    pub_sensors_reading.publish(&voltage);
 }
 
 void ControlWalk(const antdroid_msgs::Walk& msg)

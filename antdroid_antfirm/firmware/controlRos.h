@@ -38,7 +38,7 @@
 #include <antdroid_msgs/Gait.h>
 #include <antdroid_msgs/MoveLeg.h>
 #include <std_msgs/Bool.h>
-
+#include <std_msgs/UInt8.h>
 
 extern ros::NodeHandle arduino;
 extern Hexapod Antdroid;
