@@ -82,6 +82,8 @@ void Hexapod::Start(void)
 {
 	log("In Hexapod::Start", Debug);
 
+	PowerOffServos();
+
 	GoStartingPostion();
 
 	for(byte i = 0;i < 6; i++)
@@ -101,6 +103,8 @@ void Hexapod::Start(void)
     }
 
 	EnableDefaultGait();
+
+	PowerOnServos();
 }
 
 void Hexapod::GoStartingPostion(void)
@@ -724,8 +728,25 @@ void Hexapod::ReadSensors()
     #ifdef VoltageInPin
 
 	_voltage = readVoltage();
+
+	if(_voltage < BATTERY_CUTOFF_VOLTAGE)
+		PowerOffServos();
     
     #endif
+}
+
+void Hexapod::PowerOnServos()
+{
+	#ifdef ServoPowerPin
+	digitalWrite(ServoPowerPin, HIGH);
+	#endif
+}
+
+void Hexapod::PowerOffServos()
+{
+	#ifdef ServoPowerPin
+	digitalWrite(ServoPowerPin, LOW);
+	#endif
 }
 
 Hexapod::~Hexapod()

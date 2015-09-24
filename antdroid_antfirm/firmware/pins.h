@@ -50,7 +50,7 @@
     #define ServoAuxPin             34
 
     #define VoltageInPin            "A0"
-    #define ServoOnPin              13
+    #define ServoPowerPin           13
 
 #endif
 

@@ -109,6 +109,9 @@ class Hexapod: private Uncopyable
 		bool IsCollising(void);
 
 		void EnableCustomGait(const uint8_t sequence[]);
+
+ 		void PowerOnServos(void);
+ 		void PowerOffServos(void);
 };
 
 
