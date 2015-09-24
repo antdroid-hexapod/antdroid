@@ -49,10 +49,10 @@ Hexapod::Hexapod(void)
 	_rotate(false),
 	_speed(DefaultSpeed),
 	_footDistance(FootDistance),
-
 	_footDistanceStep(FootDistanceStep),
 	_speedStep(SpeedStep),
-	_floorHeightStep(FloorHeightStep)
+	_floorHeightStep(FloorHeightStep),
+	voltage(0)
 {
 	log("In Hexapod::Hexapod", Debug);
 

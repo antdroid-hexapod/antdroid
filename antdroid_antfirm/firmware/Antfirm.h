@@ -31,6 +31,7 @@
 #include "hexapod.h"
 #include "calibration.h"
 #include "log.h"
+#include "voltageMonitor.h"
 
 #ifdef ControlRos
     #include "ros.h"

@@ -68,6 +68,8 @@ class Hexapod: private Uncopyable
 
 		void LegsToCalibrationAngles(void);
 
+		uint8_t voltage;
+
 		~Hexapod();
 
 	private:

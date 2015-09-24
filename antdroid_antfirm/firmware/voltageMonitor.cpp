@@ -1,6 +1,6 @@
-/* Antfirm.cpp: main hexapod program.
+/* voltageMonitor.cpp: core of voltage monitor.
  *
- * Copyright (C) 2014 Alexander Gil and Javier Román
+ * Copyright (C) 2015 Alexander Gil and Javier Román
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,27 +17,25 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "Antfirm.h"
+#include "voltageMonitor.h"
 
-byte level_log = 0;
 
-#ifdef ControlRos
-    ros::NodeHandle arduino;
-#endif
+uint8_t readVoltage(void)
+{
+    #ifdef VoltageInPin
+    int voltage_divisor = 0;
+    uint8_t real_voltage1d = 0;
 
-Hexapod Antdroid;
+    voltage_divisor = analogRead(VoltageInPin);
 
-Control DefaultControl(&Antdroid);
+    real_voltage1d = (((long)voltage_divisor * (R1 + R2) / R2) * 5 * 10 )/ 1023
+    
+    log("Voltage:", real_voltage1d, Debug);
 
-void setup() {
+    return real_voltage1d;
 
-    DefaultControl.Start();
-	Antdroid.Start();
+    #else
+    return 120;
 
-}
-
-void loop() {
-	DefaultControl.ReadInput();
-
-    Antdroid.voltage = readVoltage();
+    #endif
 }
