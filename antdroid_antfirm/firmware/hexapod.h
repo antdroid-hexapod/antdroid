@@ -26,6 +26,7 @@
 #include "log.h"
 #include "uncopyable.h"
 #include "calibration.h"
+#include "voltageMonitor.h"
 
 
 class Hexapod: private Uncopyable
@@ -68,7 +69,7 @@ class Hexapod: private Uncopyable
 
 		void LegsToCalibrationAngles(void);
 
-		uint8_t voltage;
+		void ReadSensors(void);
 
 		~Hexapod();
 
@@ -83,6 +84,7 @@ class Hexapod: private Uncopyable
 		uint8_t _sequence[6];
 		uint8_t _speed;
 		uint8_t _speedStep;
+		uint8_t _voltage;
 
 		short _footDistance;
 		short _footDistanceStep;

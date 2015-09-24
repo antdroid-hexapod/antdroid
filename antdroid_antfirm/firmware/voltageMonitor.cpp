@@ -22,7 +22,6 @@
 
 uint8_t readVoltage(void)
 {
-    #ifdef VoltageInPin
     int voltage_divisor = 0;
     uint8_t real_voltage1d = 0;
 
@@ -33,9 +32,4 @@ uint8_t readVoltage(void)
     log("Voltage:", real_voltage1d, Debug);
 
     return real_voltage1d;
-
-    #else
-    return 120;
-
-    #endif
 }

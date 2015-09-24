@@ -28,6 +28,11 @@
 #define MOTHERBOARD BOARD_PROTOTIPE
 
 // ****************************************************************************
+// BATTERY
+// Cutoff voltage with 1 decimal: 100 = 10v 
+#define BATTERY_CUTOFF_VOLTAGE 100
+
+// ****************************************************************************
 // MIN & MAX ANGLES
 // Angle expresed with 1 decimal : 90.0 = 900
 #define LeftFemurMin -900

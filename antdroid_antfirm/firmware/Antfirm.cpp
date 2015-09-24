@@ -39,5 +39,5 @@ void setup() {
 void loop() {
 	DefaultControl.ReadInput();
 
-    Antdroid.voltage = readVoltage();
+    Antdroid.ReadSensors();
 }

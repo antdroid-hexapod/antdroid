@@ -52,7 +52,7 @@ Hexapod::Hexapod(void)
 	_footDistanceStep(FootDistanceStep),
 	_speedStep(SpeedStep),
 	_floorHeightStep(FloorHeightStep),
-	voltage(0)
+	_voltage(20 + BATTERY_CUTOFF_VOLTAGE )
 {
 	log("In Hexapod::Hexapod", Debug);
 
@@ -719,6 +719,16 @@ void Hexapod::LegsToCalibrationAngles()
 	}
 }
 
-Hexapod::~Hexapod(){
+void Hexapod::ReadSensors()
+{
+    #ifdef VoltageInPin
+
+	_voltage = readVoltage();
+    
+    #endif
+}
+
+Hexapod::~Hexapod()
+{
 	delete _legs;
 }
