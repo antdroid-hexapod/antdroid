@@ -86,6 +86,8 @@ void Control::Start(void)
 {
     arduino.initNode();
 
+    arduino.getHardware()->setBaud(9600);
+
     arduino.subscribe(walk);
     arduino.subscribe(balance);
     arduino.subscribe(rotate);
@@ -117,6 +119,7 @@ void ControlWalk(const antdroid_msgs::Walk& msg)
 
     is_new_message.data = true;
     pub_is_new_message.publish(&is_new_message);
+    pub_is_new_message.publish(&is_new_message);
 }
 
 
@@ -130,6 +133,7 @@ void ControlRotate(const antdroid_msgs::Rotate& msg)
     Antdroid.Rotate(msg.yaw);
 
     is_new_message.data = true;
+    pub_is_new_message.publish(&is_new_message);
     pub_is_new_message.publish(&is_new_message);
 }
 

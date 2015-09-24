@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python2
 # -*- encoding: utf-8 -*-
 
 # antdroid_teleop_key: provides control to antdroid from keyboard.

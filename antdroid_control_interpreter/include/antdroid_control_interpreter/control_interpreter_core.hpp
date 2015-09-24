@@ -33,7 +33,7 @@
 
 static const int SPIN_FRECUENCY = 8;
 static const int INIT_NEW_MESSAGE_COUNTER = 2;
-static const int SECONDS_UNTIL_RESTART = 6;
+static const int SECONDS_UNTIL_RESTART = 3;
 
 namespace control_interpreter_core
 {
