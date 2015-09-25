@@ -22,7 +22,9 @@
 
 #include "leg.h"
 #include "trig.h"
+#include "boards.h"
 #include "Configuration.h"
+#include "pins.h"
 #include "log.h"
 #include "uncopyable.h"
 #include "calibration.h"

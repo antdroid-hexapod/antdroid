@@ -110,7 +110,8 @@ void Control::ReadInput(void)
 {
     arduino.spinOnce();
     
-    pub_sensors_reading.publish(&voltage);
+    //Problems with syncronism:
+    //pub_sensors_reading.publish(&voltage);
 }
 
 void ControlWalk(const antdroid_msgs::Walk& msg)

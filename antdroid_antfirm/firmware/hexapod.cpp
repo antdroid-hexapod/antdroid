@@ -103,6 +103,8 @@ void Hexapod::Start(void)
     }
 
 	PowerOnServos();
+
+	delay(1500);
 	
 	EnableDefaultGait();
 
@@ -112,7 +114,7 @@ void Hexapod::GoStartingPostion(void)
 {
 	for(byte i = 0;i < 6; i++)
 	{
-		if(!_legs[i]->TryCalDefaultPosition(_footDistance , _floorHeight))
+		if(!_legs[i]->TryCalDefaultPosition(FootDistance + 40 , -45))
 			{
 				if(tryCalibrationCompleted())
 					return;
@@ -726,14 +728,12 @@ void Hexapod::LegsToCalibrationAngles()
 
 void Hexapod::ReadSensors()
 {
-    #ifdef VoltageInPin
 
 	_voltage = readVoltage();
 
 	if(_voltage < BATTERY_CUTOFF_VOLTAGE)
 		PowerOffServos();
     
-    #endif
 }
 
 void Hexapod::PowerOnServos()
