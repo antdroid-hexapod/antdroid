@@ -102,16 +102,17 @@ void Hexapod::Start(void)
     	}
     }
 
+	PowerOnServos();
+	
 	EnableDefaultGait();
 
-	PowerOnServos();
 }
 
 void Hexapod::GoStartingPostion(void)
 {
 	for(byte i = 0;i < 6; i++)
 	{
-		if(!_legs[i]->TryCalDefaultPosition(FootDistance + 30 , 0))
+		if(!_legs[i]->TryCalDefaultPosition(_footDistance , _floorHeight))
 			{
 				if(tryCalibrationCompleted())
 					return;
