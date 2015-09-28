@@ -86,8 +86,6 @@ void Control::Start(void)
 {
     arduino.initNode();
 
-    arduino.getHardware()->setBaud(9600);
-
     arduino.subscribe(walk);
     arduino.subscribe(balance);
     arduino.subscribe(rotate);
