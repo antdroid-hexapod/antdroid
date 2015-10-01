@@ -75,6 +75,10 @@ class Leg: private Uncopyable
     const short _tibiaMin;
     const short _tibiaMax;
 
+    uint8_t _coxaCalibrationAngle;
+    uint8_t _femurCalibrationAngle;
+    uint8_t _tibiaCalibrationAngle;
+
     short _coxaCurrentAngle;
     short _femurCurrentAngle;
     short _tibiaCurrentAngle;

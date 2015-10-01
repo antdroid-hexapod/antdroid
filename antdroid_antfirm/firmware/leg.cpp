@@ -70,7 +70,10 @@ Leg::Leg(short CoxaDefaultAngle, short coxa_min, short coxa_max,
     _femurMax(femur_max),
     _tibiaMin (tibia_min),
     _tibiaMax(tibia_max),
-    _legNumber(legNumber)
+    _legNumber(legNumber),
+    _coxaCalibrationAngle(eeprom_read_byte((unsigned char *)(legNumber*3+Coxa))),
+    _femurCalibrationAngle(eeprom_read_byte((unsigned char *)(legNumber*3+Femur))),
+    _tibiaCalibrationAngle(eeprom_read_byte((unsigned char *)(legNumber*3+Tibia)))
 {
     log("In Leg::Leg", Debug);
 
@@ -114,12 +117,9 @@ bool Leg::WriteStartPosition(void)
         return false;
     }
 
-    const short coxaAngle = _coxaAngle/Shift1Decimal + 
-        eeprom_read_byte((unsigned char *)(_legNumber*3+Coxa));
-    const short femurAngle = _femurAngle/Shift1Decimal + 
-        eeprom_read_byte((unsigned char *)(_legNumber*3+Femur)); 
-    const short tibiaAngle = _tibiaAngle/Shift1Decimal + 
-        eeprom_read_byte((unsigned char *)(_legNumber*3+Tibia));
+    const short coxaAngle = _coxaAngle/Shift1Decimal + _coxaCalibrationAngle;
+    const short femurAngle = _femurAngle/Shift1Decimal + _femurCalibrationAngle; 
+    const short tibiaAngle = _tibiaAngle/Shift1Decimal + _tibiaCalibrationAngle;
 
     if((coxaAngle <= 0) || (femurAngle <= 0) || (tibiaAngle <= 0)
         || (coxaAngle >= 180) || (tibiaAngle >= 180) || (femurAngle >= 180))
@@ -141,12 +141,9 @@ bool Leg::WriteStartPosition(void)
     _servoFemur.write(femurAngle);
     _servoTibia.write(tibiaAngle);
 
-    _coxaCurrentAngle = (coxaAngle - 
-        eeprom_read_byte((unsigned char *)(_legNumber*3+Coxa)))*Shift1Decimal;
-    _femurCurrentAngle = (femurAngle - 
-        eeprom_read_byte((unsigned char *)(_legNumber*3+Femur)))*Shift1Decimal;
-    _tibiaCurrentAngle = (tibiaAngle - 
-        eeprom_read_byte((unsigned char *)(_legNumber*3+Tibia)))*Shift1Decimal;
+    _coxaCurrentAngle = (coxaAngle - _coxaCalibrationAngle)*Shift1Decimal;
+    _femurCurrentAngle = (femurAngle - _femurCalibrationAngle)*Shift1Decimal;
+    _tibiaCurrentAngle = (tibiaAngle - _tibiaCalibrationAngle)*Shift1Decimal;
 
     return true;
 
@@ -322,12 +319,9 @@ bool Leg::TryUpdatePosition(const uint16_t timeMove)
         return false;
     }
 
-    if(!TryMoveServos(_coxaAngle/Shift1Decimal + 
-        eeprom_read_byte((unsigned char *)(_legNumber*3+Coxa)), 
-        _femurAngle/Shift1Decimal + 
-        eeprom_read_byte((unsigned char *)(_legNumber*3+Femur)), 
-        _tibiaAngle/Shift1Decimal + 
-        eeprom_read_byte((unsigned char *)(_legNumber*3+Tibia)),timeMove))
+    if(!TryMoveServos(_coxaAngle/Shift1Decimal + _coxaCalibrationAngle, 
+        _femurAngle/Shift1Decimal + _femurCalibrationAngle, 
+        _tibiaAngle/Shift1Decimal + _tibiaCalibrationAngle,timeMove))
         return false;
 
 
@@ -394,12 +388,9 @@ bool Leg::TryMoveServos(const short coxaAngle, const short femurAngle,
     _servoFemur.move(femurAngle, mTime);
     _servoTibia.move(tibiaAngle, mTime);
 
-    _coxaCurrentAngle = (coxaAngle - 
-        eeprom_read_byte((unsigned char *)(_legNumber*3+Coxa)))*Shift1Decimal;
-    _femurCurrentAngle = (femurAngle - 
-        eeprom_read_byte((unsigned char *)(_legNumber*3+Femur)))*Shift1Decimal;
-    _tibiaCurrentAngle = (tibiaAngle - 
-        eeprom_read_byte((unsigned char *)(_legNumber*3+Tibia)))*Shift1Decimal;
+    _coxaCurrentAngle = (coxaAngle - _coxaCalibrationAngle)*Shift1Decimal;
+    _femurCurrentAngle = (femurAngle - _femurCalibrationAngle)*Shift1Decimal;
+    _tibiaCurrentAngle = (tibiaAngle - _tibiaCalibrationAngle)*Shift1Decimal;
 
     log("Leg:", _legNumber, Debug);
     log("Time move:", mTime, Debug);
@@ -430,16 +421,13 @@ void Leg::SaveCalibrationMovePosition(uint8_t member, uint8_t angle)
     log("Moving servo to default position", Info);
 
     if(member == Coxa)
-        _servoCoxa.move(eeprom_read_byte((unsigned char *)(_legNumber*3+Coxa)),
-            DefaultTime);
+        _servoCoxa.move(_coxaCalibrationAngle, DefaultTime);
    
     else if (member == Femur)
-        _servoFemur.move(eeprom_read_byte((unsigned char *)(_legNumber*3+Femur)),
-            DefaultTime);
+        _servoFemur.move(_femurCalibrationAngle, DefaultTime);
     
     else
-        _servoTibia.move(eeprom_read_byte((unsigned char *)(_legNumber*3+Tibia)),
-            DefaultTime);    
+        _servoTibia.move(_tibiaCalibrationAngle, DefaultTime);    
 }
 
 bool Leg::TrySaveValueCalibration(uint8_t member, uint8_t angle)
@@ -457,6 +445,9 @@ bool Leg::TrySaveValueCalibration(uint8_t member, uint8_t angle)
         log("Writing to EEPROM memory. Do not turn off the power source", Warn);
         eeprom_write_byte((unsigned char *)(_legNumber*3+member), angle);
         log("Save completed.", Warn);
+        _coxaCalibrationAngle = eeprom_read_byte((unsigned char *)(_legNumber*3+Coxa)); 
+        _femurCalibrationAngle = eeprom_read_byte((unsigned char *)(_legNumber*3+Femur));
+        _tibiaCalibrationAngle = eeprom_read_byte((unsigned char *)(_legNumber*3+Tibia));
     }
 
     return true;
@@ -487,7 +478,7 @@ uint8_t Leg::CalculateCalibrationPosition(short minAngle, short maxAngle)
 
 void Leg::ServosToCalibrationAngles(void)
 {
-    _servoCoxa.write(eeprom_read_byte((unsigned char *)(_legNumber*3+Coxa)));
-    _servoFemur.write(eeprom_read_byte((unsigned char *)(_legNumber*3+Femur)));
-    _servoTibia.write(eeprom_read_byte((unsigned char *)(_legNumber*3+Tibia)));
+    _servoCoxa.write(_coxaCalibrationAngle);
+    _servoFemur.write(_femurCalibrationAngle);
+    _servoTibia.write(_tibiaCalibrationAngle);
 }
