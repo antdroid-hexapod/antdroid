@@ -446,7 +446,7 @@ int main(int argc, char** argv)
     ros::init(argc, argv, "antdroid_teleop");
     AntdroidTeleop antdroid_teleop;
 
-    ros::Rate loop_rate(2);
+    ros::Rate loop_rate(10);
 
     while(ros::ok())
     {
