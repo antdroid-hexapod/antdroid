@@ -49,7 +49,7 @@ CTRL-A / CTRL-D : rotate body left/right 20 degrees.
 R / T : balance body yaw +/- 2 degrees.
 
 + / - : increase/decrease speed.
-6 / 9 : increase/decrease foot distance.
+6 / 9 : increase/decrease foot distance. (Advanced Mode only)
 5 / 8 : increase/decrease height.
 4 / 7 : increase/decrease step lenght.
 

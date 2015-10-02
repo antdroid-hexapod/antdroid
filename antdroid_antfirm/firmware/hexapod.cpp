@@ -52,7 +52,8 @@ Hexapod::Hexapod(void)
 
 	_footDistanceStep(FootDistanceStep),
 	_speedStep(SpeedStep),
-	_floorHeightStep(FloorHeightStep)
+	_floorHeightStep(FloorHeightStep),
+	_mode(1)
 {
 	log("In Hexapod::Hexapod", Debug);
 
@@ -527,6 +528,13 @@ void Hexapod::ChangeSpeed(uint8_t speed)
 
 void Hexapod::RiseHeight(void)
 {
+
+	if(!ControlMode)
+	{
+		RiseMode();
+		return;
+	}
+
 	log("In Hexapod::RiseHeight", Debug);
 	if ( _floorHeight + _floorHeightStep > _MaxFloorHeight)
 		_floorHeight -= _floorHeightStep;
@@ -535,10 +543,63 @@ void Hexapod::RiseHeight(void)
 
 void Hexapod::DecreaseHeight(void)
 {
+	if(!ControlMode)
+	{
+		DecreaseMode();
+		return;
+	}
+
 	log("In Hexapod::DecreaseHeight", Debug);
 	if ( _floorHeight - _floorHeightStep < 0)
 		_floorHeight += _floorHeightStep;
 
+}
+
+void Hexapod::RiseMode(void)
+{
+	if(_mode < 2)
+	{
+		_mode += 1;
+		ChangeMode(_mode);
+	}
+}
+
+void Hexapod::DecreaseMode(void)
+{
+	if(_mode > 0)
+	{
+		_mode -= 1;
+		ChangeMode(_mode);
+	}
+}
+
+void Hexapod::ChangeMode(uint8_t mode)
+{
+	if(mode == 0)
+	{
+		_floorHeight = BasicLowHeigh;
+		_footDistance = BasicLowFootDistance;
+		log("Change to mode Low.", Info);
+	}
+
+	else if(mode == 1)
+	{
+		_floorHeight = BasicMiddleHeigh;
+		_footDistance = BasicMiddleFootDistance;
+		log("Change to mode Middle.", Info);
+	}
+
+	else if(mode == 2)
+	{
+		_floorHeight = BasicHighHeigh;
+		_footDistance = BasicHighFootDistance;
+		log("Change to mode High.", Info);
+	}
+
+	else
+	{
+		log("Change mode fail.", Error);
+	}
 }
 
 void Hexapod::ChangeHeightStep(uint8_t heightStep)
@@ -565,6 +626,9 @@ void Hexapod::ChangeHeight(short height)
 
 void Hexapod::RiseFootDistance(void)
 {
+	if(!ControlMode)
+		return;
+
 	log("In Hexapod::RiseFootDistance", Debug);
 	if (_footDistance < CoxaLength + FemurLength + TibiaLength - 30)
 		_footDistance += _footDistanceStep;
@@ -572,6 +636,9 @@ void Hexapod::RiseFootDistance(void)
 
 void Hexapod::DecreaseFootDistance(void)
 {
+	if(!ControlMode)
+		return;
+	
 	log("In Hexapod::DecreaseFootDistance", Debug);
 	if (_footDistance > CoxaLength - 20)
 		_footDistance -= _footDistanceStep;

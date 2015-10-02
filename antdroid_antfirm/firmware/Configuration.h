@@ -109,9 +109,9 @@
 // ****************************************************************************
 // LEG DEFFAULT POSSITION referenced leg-axis
 #define FootDistance 120
-#define	FootHeight -100
+#define	FootHeight -110
 #define DefaultTime 2000
-#define Gap 20
+#define Gap 30
 
 // ****************************************************************************
 // SERVO SPEED degrees per second (º/s)
@@ -123,7 +123,7 @@
 // ****************************************************************************
 // BODY MOVEMENT SPEED
 // value [0,255] -> 255 = MaxSpeed
-#define DefaultSpeed 80
+#define DefaultSpeed 180
 
 // ****************************************************************************
 // BODY ROTATION SPEED 
@@ -135,6 +135,21 @@
 // ControlSerial    control hexapod by serial port
 // ControlRos       control hexapod like a ROS node
 #define ControlRos
+
+// ControlMode
+// 0 -> BasicControlMode (recommended) : 3 positions (high, middle, low)
+// 1 -> AdvancedControlMode : You can control heigh, footDistance and Step distance
+#define ControlMode 0
+
+// BasicControlMode
+#define BasicHighHeigh -150
+#define BasicHighFootDistance FootDistance
+
+#define BasicMiddleHeigh FootHeight
+#define BasicMiddleFootDistance FootDistance
+
+#define BasicLowHeigh -80
+#define BasicLowFootDistance 150
 
 // ****************************************************************************
 // DEFAULT CONTROL STEPS

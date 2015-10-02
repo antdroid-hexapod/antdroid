@@ -53,6 +53,10 @@ class Hexapod: private Uncopyable
 		void ChangeHeightStep(uint8_t heightStep);
 		void ChangeHeight(short height);
 
+		void RiseMode(void);
+		void DecreaseMode(void);
+		void ChangeMode(uint8_t mode);
+
 		void RiseFootDistance(void);
 		void DecreaseFootDistance(void);
 		void ChangeFootDistanceStep(uint8_t footDistanceStep);
@@ -89,6 +93,8 @@ class Hexapod: private Uncopyable
 		short _negativePosition[6][3];
 
 		bool _rotate;
+
+		uint8_t _mode;
 
 		void InitPosition(const short x, const short y);
 
