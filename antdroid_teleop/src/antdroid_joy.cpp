@@ -330,7 +330,7 @@ void AntdroidTeleop::publish()
 
     if(_new_foot_msg)
     {
-        ROS_INFO_STREAM("publish:: foot");
+        ROS_INFO_STREAM("publish:: foot (Advanced Control Mode only)");
         _pub_foot.publish(_msg_foot);
         _new_foot_msg = false;
     }
