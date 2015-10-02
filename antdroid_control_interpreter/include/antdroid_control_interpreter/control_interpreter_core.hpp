@@ -35,6 +35,9 @@ static const int SPIN_FRECUENCY = 8;
 static const int INIT_NEW_MESSAGE_COUNTER = 2;
 static const int SECONDS_UNTIL_RESTART = 3;
 
+static const int DEFAULT_STEP = 20;
+static const int MAX_STEP = 60;
+
 namespace control_interpreter_core
 {
     class ControlInterpreterCore

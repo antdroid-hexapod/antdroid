@@ -27,7 +27,7 @@ namespace control_interpreter_core
 ControlInterpreterCore::ControlInterpreterCore() : 
     _walk(new antdroid_msgs::Walk()),
     _rotate(new antdroid_msgs::Rotate()),
-    _step(20),
+    _step(DEFAULT_STEP),
     _new_message_count(INIT_NEW_MESSAGE_COUNTER),
     _checker_count(0)
 {
@@ -168,7 +168,7 @@ void ControlInterpreterCore::InputGaitReceived(
 void ControlInterpreterCore::InputStepReceived(
     const std_msgs::Bool& input)
 {
-    if(input.data && (_step + 3 < 60) )
+    if(input.data && (_step + 3 < MAX_STEP) )
         _step += 3;
     else if (_step - 3 > 0 && !input.data)
         _step -= 3;
