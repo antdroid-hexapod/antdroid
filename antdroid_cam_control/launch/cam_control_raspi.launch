@@ -1,6 +1,7 @@
 <launch>
 
     <node pkg="antdroid_cam_control" type="cam_control" name="cam_control" args="_image_transport:=compressed" >
+        <param name="test" value="false"/>
     </node>
     
     <node pkg="rosservice" type="rosservice" name="camera_start" args="call /camera/start_capture"/>
