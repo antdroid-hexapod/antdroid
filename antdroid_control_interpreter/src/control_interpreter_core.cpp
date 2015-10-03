@@ -133,6 +133,7 @@ void ControlInterpreterCore::InputVelocityReceived(
     else
     {
         ROS_ERROR_STREAM("Coudn't handle move");
+        _new_message_count += 1;
     }
 }
 
