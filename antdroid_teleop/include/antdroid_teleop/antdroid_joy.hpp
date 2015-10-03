@@ -99,6 +99,7 @@
 #define TRIPOD_MODE 1
 #define RIPPLE_MODE 2
 
+#define MAX_ANGLE       180
 #define ANGLE_STEP      20
 #define DEAD_ZONE       0.5
 
@@ -113,7 +114,7 @@ private:
     void publish();
 
     void manageBalance(void);
-    int  updateAngle(int axis, int last_angle);
+    int  updateAngle(int max_angle, int axis, int last_angle);
 
     ros::NodeHandle _ph, _nh;
 
@@ -180,10 +181,7 @@ private:
     int _last_yaw;
     int _yaw;
 
-    int _gait_type;
-
-    int _max_angle_step;
-      
+    int _gait_type;    
 
     ros::Subscriber sub_joy;
 
@@ -207,3 +205,5 @@ private:
     boost::mutex _publish_mutex;
     ros::Timer _timer;
 };
+
+int Abs(int value);

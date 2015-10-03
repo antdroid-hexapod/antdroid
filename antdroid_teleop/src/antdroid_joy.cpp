@@ -70,7 +70,7 @@ AntdroidTeleop::AntdroidTeleop():
     _last_yaw               (0),
 
     _gait_type              (1),
-    _dead_zone_accel        (0.05),
+    _dead_zone_accel        (0),
 
     _new_balance_msg        (false),
     _new_balance_z_msg      (false),
@@ -98,7 +98,7 @@ AntdroidTeleop::AntdroidTeleop():
     _pub_speed       = _ph.advertise<antdroid_msgs::Speed>("speed", 1);
     _pub_step        = _ph.advertise<std_msgs::Bool>("step", 1);
 
-    _timer = _nh.createTimer(ros::Duration(0.25), boost::bind(&AntdroidTeleop::publish, this));
+    _timer = _nh.createTimer(ros::Duration(0.001), boost::bind(&AntdroidTeleop::publish, this));
 }
 
 void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
@@ -419,21 +419,30 @@ void AntdroidTeleop::publish()
 
 void AntdroidTeleop::manageBalance()
 {
-    _last_pitch = updateAngle(_pitch, _last_pitch);
-    _last_roll = updateAngle(_roll, _last_roll);
-    _last_yaw = updateAngle(_yaw, _last_yaw);
+    int max_pitch = MAX_ANGLE - Abs(_last_roll);
+    int max_roll = MAX_ANGLE - Abs(_last_pitch);
+    int max_yaw = MAX_ANGLE;
+
+    _last_pitch = updateAngle(max_pitch, _pitch, _last_pitch);
+    _last_roll = updateAngle(max_roll, _roll, _last_roll);
+    _last_yaw = updateAngle(max_yaw, _yaw, _last_yaw);
 
     _msg_balance.pitch = _last_pitch;
     _msg_balance.roll = _last_roll;
     _msg_balance.yaw = _last_yaw;
 }
 
-int AntdroidTeleop::updateAngle(int axis, int last_angle)
+int Abs(int value)
 {
-    _max_angle_step = ANGLE_STEP * 5;
+    if(value < 0)
+        return -value;
+    return value;
+}
 
-    if ((last_angle + axis * ANGLE_STEP > (- _max_angle_step)) & 
-        (last_angle + axis * ANGLE_STEP < _max_angle_step) & (axis != 0))
+int AntdroidTeleop::updateAngle(int max_angle, int axis, int last_angle)
+{
+    if ((last_angle + axis * ANGLE_STEP >= (- max_angle)) & 
+        (last_angle + axis * ANGLE_STEP <= max_angle) & (axis != 0))
     {
         last_angle += axis * ANGLE_STEP;
     }

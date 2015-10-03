@@ -52,33 +52,33 @@
 // ****************************************************************************
 // MIN & MAX ANGLES
 // Angle expresed with 1 decimal : 90.0 = 900
-#define LeftFemurMin -900
+#define LeftFemurMin -1000
 #define LeftFemurMax 100
-#define LeftTibiaMin -750
-#define LeftTibiaMax 750
+#define LeftTibiaMin -850
+#define LeftTibiaMax 850
 
 #define RightFemurMin -LeftFemurMax
 #define RightFemurMax -LeftFemurMin
 #define RightTibiaMin -LeftTibiaMax
 #define RightibiaMax -LeftTibiaMin
 
-#define LeftFrontCoxaMin RightFrontCoxaMin
-#define LeftFrontCoxaMax RightFrontCoxaMax
+#define LeftFrontCoxaMin -300
+#define LeftFrontCoxaMax 300
 
-#define RightFrontCoxaMin -300
-#define RightFrontCoxaMax 300
+#define RightFrontCoxaMin LeftFrontCoxaMin
+#define RightFrontCoxaMax LeftFrontCoxaMax
 
 #define LeftMiddleCoxaMin RightMiddleCoxaMin
 #define LeftMiddleCoxaMax RightMiddleCoxaMax
 
-#define RightMiddleCoxaMin -300
-#define RightMiddleCoxaMax 300
+#define RightMiddleCoxaMin LeftFrontCoxaMin
+#define RightMiddleCoxaMax LeftFrontCoxaMax
 
 #define LeftRearCoxaMin	RightRearCoxaMin
 #define LeftRearCoxaMax	RightRearCoxaMax
 
-#define RightRearCoxaMin -300
-#define RightRearCoxaMax 300
+#define RightRearCoxaMin LeftFrontCoxaMin
+#define RightRearCoxaMax LeftFrontCoxaMax
 
 // ****************************************************************************
 // LEG DIMENSIONS in mm

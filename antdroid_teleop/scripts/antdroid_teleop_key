@@ -165,9 +165,19 @@ def manage_balance():
     global last_roll
     global last_yaw
 
-    last_pitch = update_angle(pitch, last_pitch)
-    last_roll = update_angle(roll, last_roll)
-    last_yaw = update_angle(yaw, last_yaw)
+    global pitch
+    global roll
+
+    max_pitch = MAX_ANGLE - abs(last_roll)
+    max_roll = MAX_ANGLE - abs(last_pitch)
+    max_yaw = MAX_ANGLE
+
+    pitch = continuous_movement(pitch, roll, last_pitch, max_pitch)
+    roll = continuous_movement(roll, pitch, last_roll, max_roll)
+
+    last_pitch = update_angle(max_pitch, pitch, last_pitch)
+    last_roll = update_angle(max_roll, roll, last_roll)
+    last_yaw = update_angle(max_yaw, yaw, last_yaw)
 
     balance = Balance()
     balance.pitch = last_pitch 
@@ -178,14 +188,18 @@ def manage_balance():
 
     return
 
+def continuous_movement(axis, oppsite_axis, last_angle, max_angle):
+    if((oppsite_axis != 0 )& (abs(last_angle) == max_angle) & (max_angle != 0)):
+        return -(last_angle / max_angle)
 
-def update_angle(axis, last_angle):
+    return axis
+
+def update_angle(max_angle, axis, last_angle):
     
     angle_step = 20
-    max_angle_step = angle_step * 5
 
-    if ((last_angle + axis * angle_step > (- max_angle_step)) & 
-        (last_angle + axis * angle_step < max_angle_step) & (axis != 0)):
+    if ((last_angle + axis * angle_step >= (- max_angle)) & 
+        (last_angle + axis * angle_step <= max_angle) & (axis != 0)):
         
         last_angle += axis * angle_step
 
@@ -228,6 +242,8 @@ if __name__=="__main__":
     pitch = 0
     roll = 0
     yaw = 0
+
+    MAX_ANGLE = 180
 
     time.sleep(wait)
 
@@ -336,7 +352,7 @@ if __name__=="__main__":
 
 
     except:
-        print e
+        raise
 
     finally:
             print 'Keyboard_teleop finished.'
