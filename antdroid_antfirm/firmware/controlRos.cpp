@@ -60,21 +60,21 @@
 #ifdef ControlRos
 #include "controlRos.h"
 
-ros::Subscriber<antdroid_msgs::Walk> walk("Walk", &ControlWalk);
-ros::Subscriber<antdroid_msgs::Balance> balance("Balance", &ControlBalance);
-ros::Subscriber<antdroid_msgs::Rotate> rotate("Rotate", &ControlRotate);
-ros::Subscriber<antdroid_msgs::Speed> speed ("Speed", &ControlChangeSpeed);
-ros::Subscriber<antdroid_msgs::Height> height("Height", &ControlChangeHeight);
-ros::Subscriber<antdroid_msgs::Foot> footDistance("Foot", &ControlChangeFootDistance);
-ros::Subscriber<antdroid_msgs::Log> logLevel("Log", &ControlChangeLogLevel);
-ros::Subscriber<antdroid_msgs::Calibrate> calibration("Calibrate", &ControlChangeCalibration);
-ros::Subscriber<antdroid_msgs::Gait> gait("Gait", &ControlChangeGait);
-ros::Subscriber<antdroid_msgs::MoveLeg> moveLeg("MoveLeg", &ControlMoveLeg);
-ros::Subscriber<std_msgs::Bool> attack("Attack", &ControlAttack);
-ros::Subscriber<std_msgs::Bool> sayHello("Say_hello", &ControlSayHello);
+ros::Subscriber<antdroid_msgs::Walk> walk("/antfirm/walk", &ControlWalk);
+ros::Subscriber<antdroid_msgs::Balance> balance("/antfirm/balance", &ControlBalance);
+ros::Subscriber<antdroid_msgs::Rotate> rotate("/antfirm/rotate", &ControlRotate);
+ros::Subscriber<antdroid_msgs::Speed> speed ("/antfirm/speed", &ControlChangeSpeed);
+ros::Subscriber<antdroid_msgs::Height> height("/antfirm/height", &ControlChangeHeight);
+ros::Subscriber<antdroid_msgs::Foot> footDistance("/antfirm/foot", &ControlChangeFootDistance);
+ros::Subscriber<antdroid_msgs::Log> logLevel("/antfirm/log", &ControlChangeLogLevel);
+ros::Subscriber<antdroid_msgs::Calibrate> calibration("/antfirm/calibrate", &ControlChangeCalibration);
+ros::Subscriber<antdroid_msgs::Gait> gait("/antfirm/gait", &ControlChangeGait);
+ros::Subscriber<antdroid_msgs::MoveLeg> moveLeg("/antfirm/move_leg", &ControlMoveLeg);
+ros::Subscriber<std_msgs::Bool> attack("/antfirm/attack", &ControlAttack);
+ros::Subscriber<std_msgs::Bool> sayHello("/antfirm/say_hello", &ControlSayHello);
 
 std_msgs::Bool is_new_message;
-ros::Publisher pub_is_new_message("NewMessage", &is_new_message);
+ros::Publisher pub_is_new_message("/antfirm/new_message", &is_new_message);
 
 Control::Control(Hexapod* Antdroid)                                   
 {

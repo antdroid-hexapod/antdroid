@@ -64,18 +64,18 @@ bool ControlInterpreterCore::init()
     _input_say_hello_sub = nh.subscribe("say_hello", 1, 
         &ControlInterpreterCore::InputSayHelloReceived, this);
 
-    _is_new_message_sub = nh.subscribe("/NewMessage", 1, 
+    _is_new_message_sub = nh.subscribe("/antfirm/new_message", 1, 
         &ControlInterpreterCore::SendNewMessage, this);
 
-    _walk_pub = nh.advertise<antdroid_msgs::Walk>("/Walk", 1);
-    _rotate_pub = nh.advertise<antdroid_msgs::Rotate>("/Rotate", 1);
-    _speed_pub = nh.advertise<antdroid_msgs::Speed>("/Speed", 1);
-    _foot_pub = nh.advertise<antdroid_msgs::Foot>("/Foot", 1);
-    _height_pub = nh.advertise<antdroid_msgs::Height>("/Height", 1);
-    _gait_pub = nh.advertise<antdroid_msgs::Gait>("/Gait", 1);
-    _balance_pub = nh.advertise<antdroid_msgs::Balance>("/Balance", 1);
-    _attack_pub = nh.advertise<std_msgs::Bool>("/Attack", 1);
-    _say_hello_pub = nh.advertise<std_msgs::Bool>("/Say_hello", 1);
+    _walk_pub = nh.advertise<antdroid_msgs::Walk>("/antfirm/walk", 1);
+    _rotate_pub = nh.advertise<antdroid_msgs::Rotate>("/antfirm/rotate", 1);
+    _speed_pub = nh.advertise<antdroid_msgs::Speed>("/antfirm/speed", 1);
+    _foot_pub = nh.advertise<antdroid_msgs::Foot>("/antfirm/foot", 1);
+    _height_pub = nh.advertise<antdroid_msgs::Height>("/antfirm/height", 1);
+    _gait_pub = nh.advertise<antdroid_msgs::Gait>("/antfirm/gait", 1);
+    _balance_pub = nh.advertise<antdroid_msgs::Balance>("/antfirm/balance", 1);
+    _attack_pub = nh.advertise<std_msgs::Bool>("/antfirm/attack", 1);
+    _say_hello_pub = nh.advertise<std_msgs::Bool>("/antfirm/say_hello", 1);
 
     return true;
 }
