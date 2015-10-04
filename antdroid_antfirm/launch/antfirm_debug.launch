@@ -1,0 +1,9 @@
+<!--
+  Launcher for running antdroid firmware conexion
+ -->
+
+<launch>
+    <node pkg="rosserial_python" type="serial_node.py" name="antfirm" output="screen" >
+        <param name="~port" value="/dev/ttyACM0" />
+    </node>
+</launch>
