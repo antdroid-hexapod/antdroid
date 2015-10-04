@@ -70,6 +70,8 @@ ros::Subscriber<antdroid_msgs::Log> logLevel("Log", &ControlChangeLogLevel);
 ros::Subscriber<antdroid_msgs::Calibrate> calibration("Calibrate", &ControlChangeCalibration);
 ros::Subscriber<antdroid_msgs::Gait> gait("Gait", &ControlChangeGait);
 ros::Subscriber<antdroid_msgs::MoveLeg> moveLeg("MoveLeg", &ControlMoveLeg);
+ros::Subscriber<std_msgs::Bool> attack("Attack", &ControlAttack);
+
 
 std_msgs::Bool is_new_message;
 ros::Publisher pub_is_new_message("NewMessage", &is_new_message);
@@ -93,10 +95,11 @@ void Control::Start(void)
     arduino.subscribe(calibration);
     arduino.subscribe(gait);
     arduino.subscribe(moveLeg);
+    arduino.subscribe(attack);
 
     arduino.advertise(pub_is_new_message);
 
-    level_log = 3;
+    level_log = 0;
 
 }
 
@@ -171,5 +174,9 @@ void ControlMoveLeg(const antdroid_msgs::MoveLeg& msg)
     Antdroid.MoveLeg(msg.leg, msg.x, msg.y, msg.z);
 }
 
+void ControlAttack(const std_msgs::Bool& msg)
+{
+     Antdroid.Attack();
+}
 
 #endif

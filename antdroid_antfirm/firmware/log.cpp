@@ -138,66 +138,65 @@ void log(String msg, int attribute, int code)
 #else
 
     #ifdef ControlRos
-// There is a bug in rosserial_server so Log is disabled until it works.
-//
-//        void printMsg(String msg, int code)
-//        {
-//            char* charMsg = StringToChar(msg);
-//            switch(code)
-//            {
-//                case 1:
-//                    arduino.logerror(charMsg);
-//                    break;
-//                case 2:
-//                    arduino.logwarn(charMsg);
-//                    break;
-//                case 3:
-//                    arduino.loginfo(charMsg);
-//                    break;
-//                case 4:
-//                    arduino.logdebug(charMsg);
-//                    break;
-//                default:
-//                    arduino.logerror("log.cpp. printMsg.");
-//                    break;
-//            }
-//            delete charMsg;
-//        }
-//
-//        void printMsg(String msg, int attribute, int code)
-//        {
-//            char* charMsg = StringToChar(msg);
-//            String stringAttribute = String(attribute);
-//            char* charAtrribute = StringToChar(stringAttribute);
-//
-//            switch(code)
-//            {
-//                case 1:
-//                    arduino.logerror(charMsg);
-//                    arduino.logerror(charAtrribute);
-//                    break;
-//                case 2:
-//                    arduino.logwarn(charMsg);
-//                    arduino.logwarn(charAtrribute);
-//                    break;
-//                case 3:
-//                    arduino.loginfo(charMsg);
-//                    arduino.loginfo(charAtrribute);                
-//                    break;
-//                case 4:
-//                    arduino.logdebug(charMsg);
-//                    arduino.logdebug(charAtrribute);
-//                    break;
-//                default:
-//                    arduino.logerror("log.cpp. printMsg.");
-//                    break;
-//            }
-//
-//            delete charMsg;
-//            delete charAtrribute;
-//        }
-//
-//    #else
+
+        void printMsg(String msg, int code)
+        {
+            char* charMsg = StringToChar(msg);
+            switch(code)
+            {
+                case 1:
+                    arduino.logerror(charMsg);
+                    break;
+                case 2:
+                    arduino.logwarn(charMsg);
+                    break;
+                case 3:
+                    arduino.loginfo(charMsg);
+                    break;
+                case 4:
+                    arduino.logdebug(charMsg);
+                    break;
+                default:
+                    arduino.logerror("log.cpp. printMsg.");
+                    break;
+            }
+            delete charMsg;
+        }
+
+        void printMsg(String msg, int attribute, int code)
+        {
+            char* charMsg = StringToChar(msg);
+            String stringAttribute = String(attribute);
+            char* charAtrribute = StringToChar(stringAttribute);
+
+            switch(code)
+            {
+                case 1:
+                    arduino.logerror(charMsg);
+                    arduino.logerror(charAtrribute);
+                    break;
+                case 2:
+                    arduino.logwarn(charMsg);
+                    arduino.logwarn(charAtrribute);
+                    break;
+                case 3:
+                    arduino.loginfo(charMsg);
+                    arduino.loginfo(charAtrribute);                
+                    break;
+                case 4:
+                    arduino.logdebug(charMsg);
+                    arduino.logdebug(charAtrribute);
+                    break;
+                default:
+                    arduino.logerror("log.cpp. printMsg.");
+                    break;
+            }
+
+            delete charMsg;
+            delete charAtrribute;
+        }
+
+    #else
         void printMsg(String msg, int code){}
         void printMsg(String msg, int attribute, int code){}
     #endif

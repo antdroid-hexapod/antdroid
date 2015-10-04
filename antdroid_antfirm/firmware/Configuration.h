@@ -62,8 +62,8 @@
 #define RightTibiaMin -LeftTibiaMax
 #define RightibiaMax -LeftTibiaMin
 
-#define LeftFrontCoxaMin -300
-#define LeftFrontCoxaMax 300
+#define LeftFrontCoxaMin -450
+#define LeftFrontCoxaMax 450
 
 #define RightFrontCoxaMin LeftFrontCoxaMin
 #define RightFrontCoxaMax LeftFrontCoxaMax

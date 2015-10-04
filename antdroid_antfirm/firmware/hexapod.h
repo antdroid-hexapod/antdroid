@@ -27,6 +27,17 @@
 #include "uncopyable.h"
 #include "calibration.h"
 
+#define ATTACK_LEFT_FRONT_X (FootDistance * 1.75)
+#define ATTACK_LEFT_FRONT_Y (FootDistance * 0.5)
+#define ATTACK_LEFT_FRONT_Z (FootHeight * -1.27)
+
+#define ATTACK_LEFT_MIDDLE_X (FootDistance * 0.5)
+#define ATTACK_LEFT_MIDDLE_Y (FootDistance * 0.75)
+#define ATTACK_LEFT_MIDDLE_Z (FootHeight * 1.2)
+
+#define ATTACK_LEFT_REAR_X (FootDistance * -1.33)
+#define ATTACK_LEFT_REAR_Y (FootDistance * 0.33)
+#define ATTACK_LEFT_REAR_Z (FootHeight * 0.72)
 
 class Hexapod: private Uncopyable
 {
@@ -69,6 +80,8 @@ class Hexapod: private Uncopyable
 
 		void MoveLeg(const byte legNumber, const uint16_t x,
 			const uint16_t y, const uint16_t z);
+
+		void Attack(void);
 
 		void LegsToCalibrationAngles(void);
 

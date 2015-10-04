@@ -59,6 +59,8 @@ bool ControlInterpreterCore::init()
         &ControlInterpreterCore::InputStepReceived, this);
     _input_balance_sub = nh.subscribe("balance", 1, 
         &ControlInterpreterCore::InputBalanceReceived, this);
+    _input_attack_sub = nh.subscribe("attack", 1, 
+        &ControlInterpreterCore::InputAttackReceived, this);
 
     _is_new_message_sub = nh.subscribe("/NewMessage", 1, 
         &ControlInterpreterCore::SendNewMessage, this);
@@ -70,6 +72,7 @@ bool ControlInterpreterCore::init()
     _height_pub = nh.advertise<antdroid_msgs::Height>("/Height", 1);
     _gait_pub = nh.advertise<antdroid_msgs::Gait>("/Gait", 1);
     _balance_pub = nh.advertise<antdroid_msgs::Balance>("/Balance", 1);
+    _attack_pub = nh.advertise<std_msgs::Bool>("/Attack", 1);
 
 
     return true;
@@ -182,6 +185,11 @@ void ControlInterpreterCore::InputBalanceReceived(
 
 }
 
+void ControlInterpreterCore::InputAttackReceived(const std_msgs::Bool& input)
+{
+    _attack_pub.publish(input);
+}
+
 void ControlInterpreterCore::SendNewMessage(const std_msgs::Bool& msg)
 {
     if(msg.data)
@@ -205,5 +213,5 @@ void ControlInterpreterCore::CheckNewMessageCounter()
     }
 
 }
-
 }
+

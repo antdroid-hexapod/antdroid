@@ -778,6 +778,55 @@ void Hexapod::MoveLeg(const byte legNumber, const uint16_t x,
 		return;
 }
 
+void Hexapod::Attack()
+{
+	short foot_position[6][3];
+
+	foot_position[0][0] = (short ATTACK_LEFT_FRONT_X);
+	foot_position[0][1] = (short ATTACK_LEFT_FRONT_Y);
+	foot_position[0][2] = (short ATTACK_LEFT_FRONT_Z);
+
+	foot_position[2][0] = (short ATTACK_LEFT_MIDDLE_X);
+	foot_position[2][1] = (short ATTACK_LEFT_MIDDLE_Y);
+	foot_position[2][2] = (short ATTACK_LEFT_MIDDLE_Z);
+
+	foot_position[4][0] = (short ATTACK_LEFT_REAR_X);
+	foot_position[4][1] = (short ATTACK_LEFT_REAR_Y);
+	foot_position[4][2] = (short ATTACK_LEFT_REAR_Z);
+
+	for(byte i = 0;i < 3; i++)
+	{
+		for(byte f = 0;f < 3; f++)
+		{
+			if( f == 1)
+				foot_position[i * 2 + 1][f] = -foot_position[i * 2][f];
+			else
+				foot_position[i * 2 + 1][f] = foot_position[i * 2][f];
+		}
+	}
+
+	for(byte i = 0;i < 6; i++)
+	{
+		if(!_legs[i]->TryCalculatePosition(foot_position[i]))
+			return;
+	}
+
+	uint16_t timeMove = 0;
+
+	for(byte i = 0;i < 6; i++)
+	{
+		uint16_t legTimeMove = _legs[i]->CalculateTimeMove(_speed);
+		if(timeMove < legTimeMove)
+			timeMove = legTimeMove;
+	}
+
+	for(byte i = 0;i < 6; i++)
+	{	
+		if(!_legs[i]->TryUpdatePosition(timeMove))
+			return;
+	}
+}
+
 void Hexapod::LegsToCalibrationAngles()
 {
 	for(byte i = 0;i < 6; i++)

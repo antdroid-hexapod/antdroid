@@ -54,6 +54,7 @@ R / T : balance body yaw +/- 2 degrees.
 4 / 7 : increase/decrease step lenght.
 
 f: change gait ripple/tripod
+g: attack
 
 CTRL-C to quit
 """
@@ -110,6 +111,9 @@ balanceBindings = {
         'R':(0,0,1),
         'T':(0,0,-1),
            }
+attackBindings = {
+        'g':(1),
+}
 
 
 
@@ -219,7 +223,7 @@ if __name__=="__main__":
     gait_pub = rospy.Publisher('/control_interpreter/gait', Gait, queue_size=1)
     step_pub = rospy.Publisher('/control_interpreter/step', Bool, queue_size=1)
     balance_pub = rospy.Publisher('/control_interpreter/balance', Balance, queue_size=1)
-
+    attack_pub = rospy.Publisher('/control_interpreter/attack', Bool, queue_size=1)
 
 
     wait = rospy.get_param('~wait', 0)
@@ -234,6 +238,7 @@ if __name__=="__main__":
     is_gait = 0 
     step = 0
     is_step = 0
+    is_attack = 0
 
     last_pitch = 0
     last_roll = 0
@@ -284,6 +289,9 @@ if __name__=="__main__":
                 yaw = balanceBindings[key][2]
                 manage_balance()
 
+            elif key in attackBindings.keys():
+                is_attack = 1
+
             else:
                 if (key == '\x03'):
                     break
@@ -308,6 +316,8 @@ if __name__=="__main__":
             step_msg = Bool()
             step_msg.data = step
 
+            attack_msg = Bool()
+            attack_msg.data = 1
 
             if (twist.linear.x != 0) | (twist.linear.y != 0) | (twist.angular.z != 0):
                 pub.publish(twist)
@@ -331,6 +341,9 @@ if __name__=="__main__":
             if(is_step):
                 step_pub.publish(step_msg)
 
+            if(is_attack):
+                attack_pub.publish(attack_msg)
+
             x = 0
             y = 0
             th = 0
@@ -339,6 +352,7 @@ if __name__=="__main__":
             height = 2
             is_gait = 0
             is_step = 0
+            is_attack = 0
 
             if (pitch == 0) & (roll == 0) & (yaw == 0):
                 last_pitch = 0
