@@ -58,6 +58,7 @@ namespace control_interpreter_core
         ros::Publisher _gait_pub;
         ros::Publisher _balance_pub;
         ros::Publisher _attack_pub;
+        ros::Publisher _say_hello_pub;
 
         int _step;
         int _new_message_count;
@@ -74,6 +75,7 @@ namespace control_interpreter_core
         ros::Subscriber _input_step_sub;
         ros::Subscriber _input_balance_sub;
         ros::Subscriber _input_attack_sub;
+        ros::Subscriber _input_say_hello_sub;
 
         ros::Subscriber _is_new_message_sub;
 
@@ -87,7 +89,8 @@ namespace control_interpreter_core
         void InputStepReceived(const std_msgs::Bool& input);
         void InputBalanceReceived(const antdroid_msgs::Balance& input);
         void InputAttackReceived(const std_msgs::Bool& input);
-        
+        void InputSayHelloReceived(const std_msgs::Bool& input);
+
         void CheckNewMessageCounter();
         void SendNewMessage(const std_msgs::Bool& msg);
 

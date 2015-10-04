@@ -61,6 +61,8 @@ bool ControlInterpreterCore::init()
         &ControlInterpreterCore::InputBalanceReceived, this);
     _input_attack_sub = nh.subscribe("attack", 1, 
         &ControlInterpreterCore::InputAttackReceived, this);
+    _input_say_hello_sub = nh.subscribe("say_hello", 1, 
+        &ControlInterpreterCore::InputSayHelloReceived, this);
 
     _is_new_message_sub = nh.subscribe("/NewMessage", 1, 
         &ControlInterpreterCore::SendNewMessage, this);
@@ -73,7 +75,7 @@ bool ControlInterpreterCore::init()
     _gait_pub = nh.advertise<antdroid_msgs::Gait>("/Gait", 1);
     _balance_pub = nh.advertise<antdroid_msgs::Balance>("/Balance", 1);
     _attack_pub = nh.advertise<std_msgs::Bool>("/Attack", 1);
-
+    _say_hello_pub = nh.advertise<std_msgs::Bool>("/Say_hello", 1);
 
     return true;
 }
@@ -188,6 +190,11 @@ void ControlInterpreterCore::InputBalanceReceived(
 void ControlInterpreterCore::InputAttackReceived(const std_msgs::Bool& input)
 {
     _attack_pub.publish(input);
+}
+
+void ControlInterpreterCore::InputSayHelloReceived(const std_msgs::Bool& input)
+{
+    _say_hello_pub.publish(input);
 }
 
 void ControlInterpreterCore::SendNewMessage(const std_msgs::Bool& msg)

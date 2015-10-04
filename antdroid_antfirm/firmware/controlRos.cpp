@@ -71,7 +71,7 @@ ros::Subscriber<antdroid_msgs::Calibrate> calibration("Calibrate", &ControlChang
 ros::Subscriber<antdroid_msgs::Gait> gait("Gait", &ControlChangeGait);
 ros::Subscriber<antdroid_msgs::MoveLeg> moveLeg("MoveLeg", &ControlMoveLeg);
 ros::Subscriber<std_msgs::Bool> attack("Attack", &ControlAttack);
-
+ros::Subscriber<std_msgs::Bool> sayHello("Say_hello", &ControlSayHello);
 
 std_msgs::Bool is_new_message;
 ros::Publisher pub_is_new_message("NewMessage", &is_new_message);
@@ -96,6 +96,7 @@ void Control::Start(void)
     arduino.subscribe(gait);
     arduino.subscribe(moveLeg);
     arduino.subscribe(attack);
+    arduino.subscribe(sayHello);
 
     arduino.advertise(pub_is_new_message);
 
@@ -177,6 +178,11 @@ void ControlMoveLeg(const antdroid_msgs::MoveLeg& msg)
 void ControlAttack(const std_msgs::Bool& msg)
 {
      Antdroid.Attack();
+}
+
+void ControlSayHello(const std_msgs::Bool& msg)
+{
+     Antdroid.SayHello();
 }
 
 #endif

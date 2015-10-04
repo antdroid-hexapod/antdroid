@@ -53,6 +53,7 @@ Hexapod::Hexapod(void)
 	_footDistanceStep(FootDistanceStep),
 	_speedStep(SpeedStep),
 	_floorHeightStep(FloorHeightStep),
+	_is_blocked(0),
 	_mode(1)
 {
 	log("In Hexapod::Hexapod", Debug);
@@ -159,6 +160,7 @@ void Hexapod::EnableRippleGait(void)
 void Hexapod::GoDefaultPosition()
 {
 	uint16_t timeMove = 0;
+	_is_blocked = 0;
 
 	for(byte i = 0;i < 6; i++)
 	{
@@ -229,6 +231,9 @@ void Hexapod::Balance(const short pitch, const short roll, const short yaw)
 			((((long)cosRoll*sinPitch)/ Shift4Decimal)* sinYaw)/ Shift4Decimal, 
 		((long)cosRoll*cosPitch)/ Shift4Decimal}
 	};
+
+	if(_is_blocked)
+		GoDefaultPosition();
 
 	// Rotate in absolute coordinates
 	for(byte f = 0; f < 6; f++)
@@ -350,6 +355,9 @@ void Hexapod::Walk(const short x, const short y)
 
 	if(IsCollising())
 		return;
+
+	if(_is_blocked)
+		GoDefaultPosition();
 
 	const byte steps = ReturnSteps();
 
@@ -755,7 +763,7 @@ void Hexapod::EnableCustomGait(const uint8_t sequence[6])
 	GoDefaultPosition();
 }
 
-void Hexapod::MoveLeg(const byte legNumber, const uint16_t x,
+uint16_t Hexapod::MoveLeg(const byte legNumber, const uint16_t x,
 	const uint16_t y, const uint16_t z)
 {
 	short foot_position[3];
@@ -766,21 +774,24 @@ void Hexapod::MoveLeg(const byte legNumber, const uint16_t x,
 	if(legNumber >5)
 	{
 		log("Leg number must be into 0 and 5",Error);
-		return;
+		return 0;
 	}
 
 	if(!_legs[legNumber]->TryCalculatePosition(foot_position))
-		return;
+		return 0;
 
 	uint16_t timeMove = _legs[legNumber]->CalculateTimeMove(_speed);
 
 	if(!_legs[legNumber]->TryUpdatePosition(timeMove))
-		return;
+		return 0;
+
+	return timeMove;
 }
 
 void Hexapod::Attack()
 {
 	short foot_position[6][3];
+	_is_blocked = 1;
 
 	foot_position[0][0] = (short ATTACK_LEFT_FRONT_X);
 	foot_position[0][1] = (short ATTACK_LEFT_FRONT_Y);
@@ -825,6 +836,15 @@ void Hexapod::Attack()
 		if(!_legs[i]->TryUpdatePosition(timeMove))
 			return;
 	}
+}
+
+void Hexapod::SayHello()
+{
+	_is_blocked = 1;
+
+	delay(MoveLeg(0, SAY_HELLO_X_A, SAY_HELLO_Y_A, SAY_HELLO_Z) + 200);
+	delay(MoveLeg(0, SAY_HELLO_X_B, SAY_HELLO_Y_B, SAY_HELLO_Z) + 200);
+
 }
 
 void Hexapod::LegsToCalibrationAngles()
