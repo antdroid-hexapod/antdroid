@@ -27,7 +27,7 @@ namespace control_interpreter_core
 ControlInterpreterCore::ControlInterpreterCore() : 
     _walk(new antdroid_msgs::Walk()),
     _rotate(new antdroid_msgs::Rotate()),
-    _step(20),
+    _step(DEFAULT_STEP),
     _new_message_count(INIT_NEW_MESSAGE_COUNTER),
     _checker_count(0)
 {
@@ -59,18 +59,23 @@ bool ControlInterpreterCore::init()
         &ControlInterpreterCore::InputStepReceived, this);
     _input_balance_sub = nh.subscribe("balance", 1, 
         &ControlInterpreterCore::InputBalanceReceived, this);
+    _input_attack_sub = nh.subscribe("attack", 1, 
+        &ControlInterpreterCore::InputAttackReceived, this);
+    _input_say_hello_sub = nh.subscribe("say_hello", 1, 
+        &ControlInterpreterCore::InputSayHelloReceived, this);
 
-    _is_new_message_sub = nh.subscribe("/NewMessage", 1, 
+    _is_new_message_sub = nh.subscribe("/antfirm/new_message", 1, 
         &ControlInterpreterCore::SendNewMessage, this);
 
-    _walk_pub = nh.advertise<antdroid_msgs::Walk>("/Walk", 1);
-    _rotate_pub = nh.advertise<antdroid_msgs::Rotate>("/Rotate", 1);
-    _speed_pub = nh.advertise<antdroid_msgs::Speed>("/Speed", 1);
-    _foot_pub = nh.advertise<antdroid_msgs::Foot>("/Foot", 1);
-    _height_pub = nh.advertise<antdroid_msgs::Height>("/Height", 1);
-    _gait_pub = nh.advertise<antdroid_msgs::Gait>("/Gait", 1);
-    _balance_pub = nh.advertise<antdroid_msgs::Balance>("/Balance", 1);
-
+    _walk_pub = nh.advertise<antdroid_msgs::Walk>("/antfirm/walk", 1);
+    _rotate_pub = nh.advertise<antdroid_msgs::Rotate>("/antfirm/rotate", 1);
+    _speed_pub = nh.advertise<antdroid_msgs::Speed>("/antfirm/speed", 1);
+    _foot_pub = nh.advertise<antdroid_msgs::Foot>("/antfirm/foot", 1);
+    _height_pub = nh.advertise<antdroid_msgs::Height>("/antfirm/height", 1);
+    _gait_pub = nh.advertise<antdroid_msgs::Gait>("/antfirm/gait", 1);
+    _balance_pub = nh.advertise<antdroid_msgs::Balance>("/antfirm/balance", 1);
+    _attack_pub = nh.advertise<std_msgs::Bool>("/antfirm/attack", 1);
+    _say_hello_pub = nh.advertise<std_msgs::Bool>("/antfirm/say_hello", 1);
 
     return true;
 }
@@ -133,6 +138,7 @@ void ControlInterpreterCore::InputVelocityReceived(
     else
     {
         ROS_ERROR_STREAM("Coudn't handle move");
+        _new_message_count += 1;
     }
 }
 
@@ -168,7 +174,7 @@ void ControlInterpreterCore::InputGaitReceived(
 void ControlInterpreterCore::InputStepReceived(
     const std_msgs::Bool& input)
 {
-    if(input.data && (_step + 3 < 60) )
+    if(input.data && (_step + 3 < MAX_STEP) )
         _step += 3;
     else if (_step - 3 > 0 && !input.data)
         _step -= 3;
@@ -179,6 +185,16 @@ void ControlInterpreterCore::InputBalanceReceived(
 {
     _balance_pub.publish(input);
 
+}
+
+void ControlInterpreterCore::InputAttackReceived(const std_msgs::Bool& input)
+{
+    _attack_pub.publish(input);
+}
+
+void ControlInterpreterCore::InputSayHelloReceived(const std_msgs::Bool& input)
+{
+    _say_hello_pub.publish(input);
 }
 
 void ControlInterpreterCore::SendNewMessage(const std_msgs::Bool& msg)
@@ -204,5 +220,5 @@ void ControlInterpreterCore::CheckNewMessageCounter()
     }
 
 }
-
 }
+

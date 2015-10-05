@@ -52,7 +52,9 @@ Hexapod::Hexapod(void)
 	_footDistanceStep(FootDistanceStep),
 	_speedStep(SpeedStep),
 	_floorHeightStep(FloorHeightStep),
-	_voltage(20 + BATTERY_CUTOFF_VOLTAGE )
+	_voltage(20 + BATTERY_CUTOFF_VOLTAGE ),
+	_is_blocked(0),
+	_mode(1)
 {
 	log("In Hexapod::Hexapod", Debug);
 
@@ -165,6 +167,7 @@ void Hexapod::EnableRippleGait(void)
 void Hexapod::GoDefaultPosition()
 {
 	uint16_t timeMove = 0;
+	_is_blocked = 0;
 
 	for(byte i = 0;i < 6; i++)
 	{
@@ -235,6 +238,9 @@ void Hexapod::Balance(const short pitch, const short roll, const short yaw)
 			((((long)cosRoll*sinPitch)/ Shift4Decimal)* sinYaw)/ Shift4Decimal, 
 		((long)cosRoll*cosPitch)/ Shift4Decimal}
 	};
+
+	if(_is_blocked)
+		GoDefaultPosition();
 
 	// Rotate in absolute coordinates
 	for(byte f = 0; f < 6; f++)
@@ -356,6 +362,9 @@ void Hexapod::Walk(const short x, const short y)
 
 	if(IsCollising())
 		return;
+
+	if(_is_blocked)
+		GoDefaultPosition();
 
 	const byte steps = ReturnSteps();
 
@@ -534,6 +543,13 @@ void Hexapod::ChangeSpeed(uint8_t speed)
 
 void Hexapod::RiseHeight(void)
 {
+
+	if(!ControlMode)
+	{
+		RiseMode();
+		return;
+	}
+
 	log("In Hexapod::RiseHeight", Debug);
 	if ( _floorHeight + _floorHeightStep > _MaxFloorHeight)
 		_floorHeight -= _floorHeightStep;
@@ -542,10 +558,63 @@ void Hexapod::RiseHeight(void)
 
 void Hexapod::DecreaseHeight(void)
 {
+	if(!ControlMode)
+	{
+		DecreaseMode();
+		return;
+	}
+
 	log("In Hexapod::DecreaseHeight", Debug);
 	if ( _floorHeight - _floorHeightStep < 0)
 		_floorHeight += _floorHeightStep;
 
+}
+
+void Hexapod::RiseMode(void)
+{
+	if(_mode < 2)
+	{
+		_mode += 1;
+		ChangeMode(_mode);
+	}
+}
+
+void Hexapod::DecreaseMode(void)
+{
+	if(_mode > 0)
+	{
+		_mode -= 1;
+		ChangeMode(_mode);
+	}
+}
+
+void Hexapod::ChangeMode(uint8_t mode)
+{
+	if(mode == 0)
+	{
+		_floorHeight = BasicLowHeigh;
+		_footDistance = BasicLowFootDistance;
+		log("Change to mode Low.", Info);
+	}
+
+	else if(mode == 1)
+	{
+		_floorHeight = BasicMiddleHeigh;
+		_footDistance = BasicMiddleFootDistance;
+		log("Change to mode Middle.", Info);
+	}
+
+	else if(mode == 2)
+	{
+		_floorHeight = BasicHighHeigh;
+		_footDistance = BasicHighFootDistance;
+		log("Change to mode High.", Info);
+	}
+
+	else
+	{
+		log("Change mode fail.", Error);
+	}
 }
 
 void Hexapod::ChangeHeightStep(uint8_t heightStep)
@@ -572,6 +641,9 @@ void Hexapod::ChangeHeight(short height)
 
 void Hexapod::RiseFootDistance(void)
 {
+	if(!ControlMode)
+		return;
+
 	log("In Hexapod::RiseFootDistance", Debug);
 	if (_footDistance < CoxaLength + FemurLength + TibiaLength - 30)
 		_footDistance += _footDistanceStep;
@@ -579,6 +651,9 @@ void Hexapod::RiseFootDistance(void)
 
 void Hexapod::DecreaseFootDistance(void)
 {
+	if(!ControlMode)
+		return;
+	
 	log("In Hexapod::DecreaseFootDistance", Debug);
 	if (_footDistance > CoxaLength - 20)
 		_footDistance -= _footDistanceStep;
@@ -695,7 +770,7 @@ void Hexapod::EnableCustomGait(const uint8_t sequence[6])
 	GoDefaultPosition();
 }
 
-void Hexapod::MoveLeg(const byte legNumber, const uint16_t x,
+uint16_t Hexapod::MoveLeg(const byte legNumber, const uint16_t x,
 	const uint16_t y, const uint16_t z)
 {
 	short foot_position[3];
@@ -706,16 +781,77 @@ void Hexapod::MoveLeg(const byte legNumber, const uint16_t x,
 	if(legNumber >5)
 	{
 		log("Leg number must be into 0 and 5",Error);
-		return;
+		return 0;
 	}
 
 	if(!_legs[legNumber]->TryCalculatePosition(foot_position))
-		return;
+		return 0;
 
 	uint16_t timeMove = _legs[legNumber]->CalculateTimeMove(_speed);
 
 	if(!_legs[legNumber]->TryUpdatePosition(timeMove))
-		return;
+		return 0;
+
+	return timeMove;
+}
+
+void Hexapod::Attack()
+{
+	short foot_position[6][3];
+	_is_blocked = 1;
+
+	foot_position[0][0] = (short ATTACK_LEFT_FRONT_X);
+	foot_position[0][1] = (short ATTACK_LEFT_FRONT_Y);
+	foot_position[0][2] = (short ATTACK_LEFT_FRONT_Z);
+
+	foot_position[2][0] = (short ATTACK_LEFT_MIDDLE_X);
+	foot_position[2][1] = (short ATTACK_LEFT_MIDDLE_Y);
+	foot_position[2][2] = (short ATTACK_LEFT_MIDDLE_Z);
+
+	foot_position[4][0] = (short ATTACK_LEFT_REAR_X);
+	foot_position[4][1] = (short ATTACK_LEFT_REAR_Y);
+	foot_position[4][2] = (short ATTACK_LEFT_REAR_Z);
+
+	for(byte i = 0;i < 3; i++)
+	{
+		for(byte f = 0;f < 3; f++)
+		{
+			if( f == 1)
+				foot_position[i * 2 + 1][f] = -foot_position[i * 2][f];
+			else
+				foot_position[i * 2 + 1][f] = foot_position[i * 2][f];
+		}
+	}
+
+	for(byte i = 0;i < 6; i++)
+	{
+		if(!_legs[i]->TryCalculatePosition(foot_position[i]))
+			return;
+	}
+
+	uint16_t timeMove = 0;
+
+	for(byte i = 0;i < 6; i++)
+	{
+		uint16_t legTimeMove = _legs[i]->CalculateTimeMove(_speed);
+		if(timeMove < legTimeMove)
+			timeMove = legTimeMove;
+	}
+
+	for(byte i = 0;i < 6; i++)
+	{	
+		if(!_legs[i]->TryUpdatePosition(timeMove))
+			return;
+	}
+}
+
+void Hexapod::SayHello()
+{
+	_is_blocked = 1;
+
+	delay(MoveLeg(0, SAY_HELLO_X_A, SAY_HELLO_Y_A, SAY_HELLO_Z) + 200);
+	delay(MoveLeg(0, SAY_HELLO_X_B, SAY_HELLO_Y_B, SAY_HELLO_Z) + 200);
+
 }
 
 void Hexapod::LegsToCalibrationAngles()

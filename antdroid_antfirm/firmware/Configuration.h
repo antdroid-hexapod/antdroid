@@ -35,33 +35,33 @@
 // ****************************************************************************
 // MIN & MAX ANGLES
 // Angle expresed with 1 decimal : 90.0 = 900
-#define LeftFemurMin -900
+#define LeftFemurMin -1000
 #define LeftFemurMax 100
-#define LeftTibiaMin -750
-#define LeftTibiaMax 750
+#define LeftTibiaMin -850
+#define LeftTibiaMax 850
 
 #define RightFemurMin -LeftFemurMax
 #define RightFemurMax -LeftFemurMin
 #define RightTibiaMin -LeftTibiaMax
 #define RightibiaMax -LeftTibiaMin
 
-#define LeftFrontCoxaMin RightFrontCoxaMin
-#define LeftFrontCoxaMax RightFrontCoxaMax
+#define LeftFrontCoxaMin -450
+#define LeftFrontCoxaMax 450
 
-#define RightFrontCoxaMin -300
-#define RightFrontCoxaMax 300
+#define RightFrontCoxaMin LeftFrontCoxaMin
+#define RightFrontCoxaMax LeftFrontCoxaMax
 
 #define LeftMiddleCoxaMin RightMiddleCoxaMin
 #define LeftMiddleCoxaMax RightMiddleCoxaMax
 
-#define RightMiddleCoxaMin -300
-#define RightMiddleCoxaMax 300
+#define RightMiddleCoxaMin LeftFrontCoxaMin
+#define RightMiddleCoxaMax LeftFrontCoxaMax
 
 #define LeftRearCoxaMin	RightRearCoxaMin
 #define LeftRearCoxaMax	RightRearCoxaMax
 
-#define RightRearCoxaMin -300
-#define RightRearCoxaMax 300
+#define RightRearCoxaMin LeftFrontCoxaMin
+#define RightRearCoxaMax LeftFrontCoxaMax
 
 // ****************************************************************************
 // LEG DIMENSIONS in mm
@@ -92,9 +92,9 @@
 // ****************************************************************************
 // LEG DEFFAULT POSSITION referenced leg-axis
 #define FootDistance 120
-#define	FootHeight -100
+#define	FootHeight -110
 #define DefaultTime 2000
-#define Gap 20
+#define Gap 30
 
 // ****************************************************************************
 // SERVO SPEED degrees per second (º/s)
@@ -106,7 +106,7 @@
 // ****************************************************************************
 // BODY MOVEMENT SPEED
 // value [0,255] -> 255 = MaxSpeed
-#define DefaultSpeed 80
+#define DefaultSpeed 180
 
 // ****************************************************************************
 // BODY ROTATION SPEED 
@@ -118,6 +118,21 @@
 // ControlSerial    control hexapod by serial port
 // ControlRos       control hexapod like a ROS node
 #define ControlRos
+
+// ControlMode
+// 0 -> BasicControlMode (recommended) : 3 positions (high, middle, low)
+// 1 -> AdvancedControlMode : You can control heigh, footDistance and Step distance
+#define ControlMode 0
+
+// BasicControlMode
+#define BasicHighHeigh -150
+#define BasicHighFootDistance FootDistance
+
+#define BasicMiddleHeigh FootHeight
+#define BasicMiddleFootDistance FootDistance
+
+#define BasicLowHeigh -80
+#define BasicLowFootDistance 150
 
 // ****************************************************************************
 // DEFAULT CONTROL STEPS

@@ -30,6 +30,24 @@
 #include "calibration.h"
 #include "voltageMonitor.h"
 
+#define ATTACK_LEFT_FRONT_X (FootDistance * 1.75)
+#define ATTACK_LEFT_FRONT_Y (FootDistance * 0.5)
+#define ATTACK_LEFT_FRONT_Z (FootHeight * -1.27)
+
+#define ATTACK_LEFT_MIDDLE_X (FootDistance * 0.5)
+#define ATTACK_LEFT_MIDDLE_Y (FootDistance * 0.75)
+#define ATTACK_LEFT_MIDDLE_Z (FootHeight * 1.2)
+
+#define ATTACK_LEFT_REAR_X (FootDistance * -1.33)
+#define ATTACK_LEFT_REAR_Y (FootDistance * 0.33)
+#define ATTACK_LEFT_REAR_Z (FootHeight * 0.72)
+
+#define SAY_HELLO_X_A FootDistance * 1.875
+#define SAY_HELLO_Y_A FootDistance * 0.25
+#define SAY_HELLO_Z FootHeight * -1.27
+
+#define SAY_HELLO_X_B FootDistance * 1.66
+#define SAY_HELLO_Y_B FootDistance * 0.66
 
 class Hexapod: private Uncopyable
 {
@@ -56,6 +74,10 @@ class Hexapod: private Uncopyable
 		void ChangeHeightStep(uint8_t heightStep);
 		void ChangeHeight(short height);
 
+		void RiseMode(void);
+		void DecreaseMode(void);
+		void ChangeMode(uint8_t mode);
+
 		void RiseFootDistance(void);
 		void DecreaseFootDistance(void);
 		void ChangeFootDistanceStep(uint8_t footDistanceStep);
@@ -66,8 +88,11 @@ class Hexapod: private Uncopyable
 		
 		void ChangeGait(uint8_t type, const uint8_t sequence[]);
 
-		void MoveLeg(const byte legNumber, const uint16_t x,
+		uint16_t MoveLeg(const byte legNumber, const uint16_t x,
 			const uint16_t y, const uint16_t z);
+
+		void Attack(void);
+		void SayHello(void);
 
 		void LegsToCalibrationAngles(void);
 
@@ -95,6 +120,9 @@ class Hexapod: private Uncopyable
 		short _negativePosition[6][3];
 
 		bool _rotate;
+		bool _is_blocked;
+
+		uint8_t _mode;
 
 		void InitPosition(const short x, const short y);
 

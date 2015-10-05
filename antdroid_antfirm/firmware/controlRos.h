@@ -53,6 +53,8 @@ void ControlChangeLogLevel(const antdroid_msgs::Log& msg);
 void ControlChangeCalibration(const antdroid_msgs::Calibrate& msg);
 void ControlChangeGait(const antdroid_msgs::Gait& msg);
 void ControlMoveLeg(const antdroid_msgs::MoveLeg& msg);
+void ControlAttack(const std_msgs::Bool& msg);
+void ControlSayHello(const std_msgs::Bool& msg);
 
 class Control
 {

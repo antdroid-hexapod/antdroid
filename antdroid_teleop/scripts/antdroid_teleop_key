@@ -49,11 +49,13 @@ CTRL-A / CTRL-D : rotate body left/right 20 degrees.
 R / T : balance body yaw +/- 2 degrees.
 
 + / - : increase/decrease speed.
-6 / 9 : increase/decrease foot distance.
+6 / 9 : increase/decrease foot distance. (Advanced Mode only)
 5 / 8 : increase/decrease height.
 4 / 7 : increase/decrease step lenght.
 
 f: change gait ripple/tripod
+g: attack
+h: say hello
 
 CTRL-C to quit
 """
@@ -110,7 +112,13 @@ balanceBindings = {
         'R':(0,0,1),
         'T':(0,0,-1),
            }
+attackBindings = {
+        'g':(1),
+}
 
+sayHelloBindings = {
+        'h':(1),
+}
 
 
 def read_single_keypress():
@@ -165,9 +173,19 @@ def manage_balance():
     global last_roll
     global last_yaw
 
-    last_pitch = update_angle(pitch, last_pitch)
-    last_roll = update_angle(roll, last_roll)
-    last_yaw = update_angle(yaw, last_yaw)
+    global pitch
+    global roll
+
+    max_pitch = MAX_ANGLE - abs(last_roll)
+    max_roll = MAX_ANGLE - abs(last_pitch)
+    max_yaw = MAX_ANGLE
+
+    pitch = continuous_movement(pitch, roll, last_pitch, max_pitch)
+    roll = continuous_movement(roll, pitch, last_roll, max_roll)
+
+    last_pitch = update_angle(max_pitch, pitch, last_pitch)
+    last_roll = update_angle(max_roll, roll, last_roll)
+    last_yaw = update_angle(max_yaw, yaw, last_yaw)
 
     balance = Balance()
     balance.pitch = last_pitch 
@@ -178,14 +196,18 @@ def manage_balance():
 
     return
 
+def continuous_movement(axis, oppsite_axis, last_angle, max_angle):
+    if((oppsite_axis != 0 )& (abs(last_angle) == max_angle) & (max_angle != 0)):
+        return -(last_angle / max_angle)
 
-def update_angle(axis, last_angle):
+    return axis
+
+def update_angle(max_angle, axis, last_angle):
     
     angle_step = 20
-    max_angle_step = angle_step * 5
 
-    if ((last_angle + axis * angle_step > (- max_angle_step)) & 
-        (last_angle + axis * angle_step < max_angle_step) & (axis != 0)):
+    if ((last_angle + axis * angle_step >= (- max_angle)) & 
+        (last_angle + axis * angle_step <= max_angle) & (axis != 0)):
         
         last_angle += axis * angle_step
 
@@ -205,8 +227,8 @@ if __name__=="__main__":
     gait_pub = rospy.Publisher('/control_interpreter/gait', Gait, queue_size=1)
     step_pub = rospy.Publisher('/control_interpreter/step', Bool, queue_size=1)
     balance_pub = rospy.Publisher('/control_interpreter/balance', Balance, queue_size=1)
-
-
+    attack_pub = rospy.Publisher('/control_interpreter/attack', Bool, queue_size=1)
+    say_hello_pub = rospy.Publisher('/control_interpreter/say_hello', Bool, queue_size=1)
 
     wait = rospy.get_param('~wait', 0)
 
@@ -220,6 +242,8 @@ if __name__=="__main__":
     is_gait = 0 
     step = 0
     is_step = 0
+    is_attack = 0
+    is_say_hello = 0
 
     last_pitch = 0
     last_roll = 0
@@ -228,6 +252,8 @@ if __name__=="__main__":
     pitch = 0
     roll = 0
     yaw = 0
+
+    MAX_ANGLE = 180
 
     time.sleep(wait)
 
@@ -268,6 +294,11 @@ if __name__=="__main__":
                 yaw = balanceBindings[key][2]
                 manage_balance()
 
+            elif key in attackBindings.keys():
+                is_attack = 1
+
+            elif key in sayHelloBindings.keys():
+                is_say_hello = 1
             else:
                 if (key == '\x03'):
                     break
@@ -292,6 +323,11 @@ if __name__=="__main__":
             step_msg = Bool()
             step_msg.data = step
 
+            attack_msg = Bool()
+            attack_msg.data = 1
+
+            say_hello_msg = Bool()
+            say_hello_msg.data = 1
 
             if (twist.linear.x != 0) | (twist.linear.y != 0) | (twist.angular.z != 0):
                 pub.publish(twist)
@@ -315,6 +351,12 @@ if __name__=="__main__":
             if(is_step):
                 step_pub.publish(step_msg)
 
+            if(is_attack):
+                attack_pub.publish(attack_msg)
+
+            if(is_say_hello):
+                say_hello_pub.publish(say_hello_msg)
+
             x = 0
             y = 0
             th = 0
@@ -323,6 +365,8 @@ if __name__=="__main__":
             height = 2
             is_gait = 0
             is_step = 0
+            is_attack = 0
+            is_say_hello = 0
 
             if (pitch == 0) & (roll == 0) & (yaw == 0):
                 last_pitch = 0
@@ -336,7 +380,7 @@ if __name__=="__main__":
 
 
     except:
-        print e
+        raise
 
     finally:
             print 'Keyboard_teleop finished.'
