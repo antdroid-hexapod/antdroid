@@ -41,5 +41,5 @@ rosserial_configure_client(
     TOOLCHAIN_FILE ${ROSSERIAL_ARDUINO_TOOLCHAIN}
     )
  
-rosserial_add_client_target(firmware antfirm ALL)
-rosserial_add_client_target(firmware antfirm-upload)
+rosserial_add_client_target(firmware ALL)
+rosserial_add_client_target(firmware upload)
