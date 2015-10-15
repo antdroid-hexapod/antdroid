@@ -96,7 +96,7 @@ class Hexapod: private Uncopyable
 
 		void LegsToCalibrationAngles(void);
 
-		void ReadSensors(void);
+		uint8_t ReadSensors(void);
 
 		~Hexapod();
 

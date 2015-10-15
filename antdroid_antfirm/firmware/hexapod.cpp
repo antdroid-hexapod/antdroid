@@ -862,7 +862,7 @@ void Hexapod::LegsToCalibrationAngles()
 	}
 }
 
-void Hexapod::ReadSensors()
+uint8_t Hexapod::ReadSensors()
 {
 
 	_voltage = readVoltage();
@@ -870,6 +870,7 @@ void Hexapod::ReadSensors()
 	if(_voltage < BATTERY_CUTOFF_VOLTAGE)
 		PowerOffServos();
     
+    return _voltage;
 }
 
 void Hexapod::PowerOnServos()

@@ -25,7 +25,7 @@
 // ****************************************************************************
 // MOTHERBOARD
 // select your board: BOARD_PROTOTIPE or BOARD_ANTDROID supported
-#define MOTHERBOARD BOARD_PROTOTIPE
+#define MOTHERBOARD BOARD_ANTDROID
 
 // ****************************************************************************
 // BATTERY

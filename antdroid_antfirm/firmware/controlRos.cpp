@@ -77,11 +77,12 @@ std_msgs::Bool is_new_message;
 ros::Publisher pub_is_new_message("/antfirm/new_message", &is_new_message);
 
 std_msgs::UInt8 voltage;
-ros::Publisher pub_sensors_reading("SensorsReading", &voltage);
+ros::Publisher pub_sensors_reading("/antfirm/sensors_reading", &voltage);
 
 Control::Control(Hexapod* Antdroid)                                   
 {
     is_new_message.data = true;
+    voltage.data = 0;
 }
 
 void Control::Start(void)
@@ -112,8 +113,6 @@ void Control::ReadInput(void)
 {
     arduino.spinOnce();
     
-    //Problems with syncronism:
-    //pub_sensors_reading.publish(&voltage);
 }
 
 void ControlWalk(const antdroid_msgs::Walk& msg)
@@ -174,6 +173,9 @@ void ControlChangeGait(const antdroid_msgs::Gait& msg)
 
     is_new_message.data = false;
     pub_is_new_message.publish(&is_new_message);
+
+    //voltage.data = Antdroid.ReadSensors();
+    //pub_sensors_reading.publish(&voltage);
 }
 
 
