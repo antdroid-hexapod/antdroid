@@ -40,50 +40,14 @@
 
 void log(String msg, int code)
 {
-    if(level_log >= 1)
-    {
-        if(code == 1)
-            printMsg(msg, code);
-        if(level_log >= 2)
-        {
-            if(code == 2)
-                printMsg(msg, code);
-            if(level_log >= 3 )
-            {
-               if(code == 3) 
-                   printMsg(msg, code);
-               if(level_log >= 4)
-               {
-                    if(code == 4)
-                        printMsg(msg, code);
-               }
-            }
-        }
-    }
+    if(level_log >= code)
+        printMsg(msg, code);
 }
 
 void log(String msg, int attribute, int code)
 {
-    if(level_log >= 1)
-    {
-        if(code == 1)
-            printMsg(msg, attribute, code);
-        if(level_log >= 2)
-        {
-            if(code == 2)
-                printMsg(msg, attribute, code);
-            if(level_log >= 3 )
-            {
-               if(code == 3) 
-                    printMsg(msg, attribute, code);
-               if(level_log >= 4)
-                {
-                    if(code == 4)
-                    printMsg(msg, attribute, code);
-                }
-            }
-        }
-    }
+    if(level_log >= code)
+        printMsg(msg, attribute, code);
 }
 
 #ifdef ControlSerial
