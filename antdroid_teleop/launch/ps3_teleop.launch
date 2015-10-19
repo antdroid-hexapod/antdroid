@@ -7,6 +7,8 @@
     <remap from="antdroid_teleop_joystick/gait" to="control_interpreter/gait"/>
     <remap from="antdroid_teleop_joystick/step" to="control_interpreter/step"/>
     <remap from="antdroid_teleop_joystick/balance" to="control_interpreter/balance"/>
+    <remap from="antdroid_teleop_joystick/attack" to="control_interpreter/attack"/>
+    <remap from="antdroid_teleop_joystick/say_hello" to="control_interpreter/say_hello"/>
   </node>
 
   <node pkg="joy" type="joy_node" name="joystick"/>
