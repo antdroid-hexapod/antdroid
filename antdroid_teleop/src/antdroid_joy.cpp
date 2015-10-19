@@ -55,8 +55,7 @@ AntdroidTeleop::AntdroidTeleop():
     _balance_default        (PS3_BUTTON_STICK_RIGHT),
 
     _attack                 (PS3_BUTTON_ACTION_TRIANGLE),
-    _engage                 (PS3_BUTTON_START),
-    _disengage              (PS3_BUTTON_SELECT),
+    _say_hello              (PS3_BUTTON_ACTION_CIRCLE),
 
     _action_button          (PS3_BUTTON_REAR_RIGHT_2),
     _balance_mode           (PS3_BUTTON_REAR_LEFT_2),
@@ -83,8 +82,7 @@ AntdroidTeleop::AntdroidTeleop():
     _new_step_msg           (false),
     _new_balance_default_msg(false),
     _new_attack_msg         (false),
-    _new_engage_msg         (false),
-    _new_disengage_msg      (false),
+    _new_say_hello_msg      (false),
     _new_balance_accel_msg  (false)
 {      
  
@@ -97,6 +95,8 @@ AntdroidTeleop::AntdroidTeleop():
     _pub_foot        = _ph.advertise<antdroid_msgs::Foot>("foot", 1);
     _pub_speed       = _ph.advertise<antdroid_msgs::Speed>("speed", 1);
     _pub_step        = _ph.advertise<std_msgs::Bool>("step", 1);
+    _pub_attack      = _ph.advertise<std_msgs::Bool>("attack", 1);
+    _pub_say_hello   = _ph.advertise<std_msgs::Bool>("say_hello", 1);
 
     _timer = _nh.createTimer(ros::Duration(0.001), boost::bind(&AntdroidTeleop::publish, this));
 }
@@ -179,8 +179,8 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 
         _msg_vel.angular.z = 0;
 
-        /*ROS_INFO("_msg_vel(linear.x, linear.y, angular.z) =  ( %f, %f, %f) ",
-            _msg_vel.linear.x,_msg_vel.linear.y,_msg_vel.angular.z);*/
+        ROS_DEBUG("_msg_vel(linear.x, linear.y, angular.z) =  ( %f, %f, %f) ",
+            _msg_vel.linear.x,_msg_vel.linear.y,_msg_vel.angular.z);
 
         _new_vel_msg = true;
     }
@@ -288,26 +288,17 @@ void AntdroidTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
         ROS_INFO("Sensitivity: %d", (int)(100 - _dead_zone_accel * 1000));
     }
 
-    /*****************  ATTACK ************************************************/
-    /*if(joy->buttons[_attack])
+    if(joy->buttons[_attack])
     {
-
+        _msg_attack.data = true;
         _new_attack_msg = true;
     }
 
-    /*****************  ENGAGE ************************************************
-    if(joy->buttons[_engage])
+    if(joy->buttons[_say_hello])
     {
-
-        _new_engage_msg = true;
+        _msg_say_hello.data = true;
+        _new_say_hello_msg = true;
     }
-
-    /*****************  DISENGAGE *********************************************
-    if(joy->buttons[_disengage])
-    {
-
-        _new_disengage_msg = true;
-    }*/
 }
 
 void AntdroidTeleop::publish()
@@ -397,24 +388,20 @@ void AntdroidTeleop::publish()
         _pub_balance.publish(_msg_balance);
         _new_balance_accel_msg = false;
     }
-/*
+
     if(_new_attack_msg)
     {
         ROS_INFO_STREAM("publish:: attack");
+        _pub_attack.publish(_msg_attack);
         _new_attack_msg = false;
     }
 
-    if(_new_engage_msg)
+    if(_new_say_hello_msg)
     {
-        ROS_INFO_STREAM("publish:: engage");
-        _new_engage_msg = false;
+        ROS_INFO_STREAM("publish:: say hello");
+        _pub_say_hello.publish(_msg_say_hello);
+        _new_say_hello_msg = false;
     }
-
-    if(_new_disengage_msg)
-    {
-        ROS_INFO_STREAM("publish:: disengage");
-        _new_disengage_msg = false;
-    }*/
 }
 
 void AntdroidTeleop::manageBalance()
@@ -462,7 +449,6 @@ int main(int argc, char** argv)
         ros::spinOnce();
         loop_rate.sleep();
     }
-    //ros::spin();
 
     ROS_INFO_STREAM("Program exiting");
     return 0;

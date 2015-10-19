@@ -154,8 +154,7 @@ private:
     int _balance_mode;
 
     int _attack;
-    int _engage;
-    int _disengage;
+    int _say_hello;
 
     float _dead_zone_accel;
 
@@ -170,8 +169,7 @@ private:
     bool _new_step_msg;
     bool _new_balance_default_msg;
     bool _new_attack_msg;
-    bool _new_engage_msg;
-    bool _new_disengage_msg;
+    bool _new_say_hello_msg;
     bool _new_balance_accel_msg;
 
     int _last_pitch;
@@ -192,6 +190,8 @@ private:
     ros::Publisher  _pub_speed;
     ros::Publisher  _pub_step;
     ros::Publisher  _pub_vel;
+    ros::Publisher  _pub_attack;
+    ros::Publisher  _pub_say_hello;
 
     antdroid_msgs::Balance      _msg_balance;
     antdroid_msgs::Gait         _msg_gait;
@@ -200,7 +200,8 @@ private:
     antdroid_msgs::Speed        _msg_changeSpeed;
     geometry_msgs::Twist        _msg_vel;
     std_msgs::Bool              _msg_step;
-
+    std_msgs::Bool              _msg_attack;
+    std_msgs::Bool              _msg_say_hello;
     
     boost::mutex _publish_mutex;
     ros::Timer _timer;
