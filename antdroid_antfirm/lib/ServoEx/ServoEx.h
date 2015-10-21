@@ -112,7 +112,7 @@ typedef enum { _timer1, _Nbr_16timers } timer16_Sequence_t ;
 #define DEFAULT_PULSE_WIDTH  1500     // default pulse width when servo is attached
 #define REFRESH_INTERVAL    20000     // minumim time to refresh servos in microseconds 
 
-#define SERVOS_PER_TIMER       12     // the maximum number of servos controlled by one timer 
+#define SERVOS_PER_TIMER        6     // the maximum number of servos controlled by one timer 
 #define MAX_SERVOS   (_Nbr_16timers  * SERVOS_PER_TIMER)
 
 #define INVALID_SERVO         255     // flag indicating an invalid servo index
