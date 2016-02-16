@@ -20,6 +20,7 @@
 
   <run_depend>rosserial_arduino</run_depend>
   <run_depend>rosserial_msgs</run_depend>
+  <run_depend>rosserial_server</run_depend>
   <run_depend>antdroid_msgs</run_depend>
   <run_depend>std_msgs</run_depend>
 
