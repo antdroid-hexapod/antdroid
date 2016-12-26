@@ -8,16 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
     std_msgs
 )
 
-## Generate added messages and services with any dependencies listed here
- generate_messages(
-   DEPENDENCIES
-   std_msgs  # Or other packages containing msgs
-   antdroid_msgs
- )
-
-
-catkin_package(CATKIN_DEPENDS antdroid_msgs)
-
+catkin_package()
 
 rosserial_generate_ros_lib(
     PACKAGE rosserial_arduino
@@ -28,6 +19,6 @@ rosserial_configure_client(
     DIRECTORY firmware
     TOOLCHAIN_FILE ${ROSSERIAL_ARDUINO_TOOLCHAIN}
     )
- 
+
 rosserial_add_client_target(firmware ALL)
 rosserial_add_client_target(firmware upload)
