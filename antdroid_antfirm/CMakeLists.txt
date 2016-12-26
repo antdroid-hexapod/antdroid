@@ -8,18 +8,6 @@ find_package(catkin REQUIRED COMPONENTS
     std_msgs
 )
 
-
-#add_message_files(
-#    FILES
-#    Balance.msg
-#    Foot.msg
-#    Height.msg
-#    Rotate.msg
-#    Speed.msg
-#    Walk.msg
-#)
-
-
 ## Generate added messages and services with any dependencies listed here
  generate_messages(
    DEPENDENCIES
@@ -28,7 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
  )
 
 
-catkin_package()
+catkin_package(CATKIN_DEPENDS antdroid_msgs)
 
 
 rosserial_generate_ros_lib(
